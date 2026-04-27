@@ -5,6 +5,7 @@ from referee.game import PlayerColor, Coord, Direction, CARDINAL_DIRECTIONS, Cel
     Action, PlaceAction, MoveAction, EatAction, CascadeAction
 
 from .rules import apply_action, get_legal_actions
+from .evaluation import choose_coord_placement_phase
 
 
 class Agent:
@@ -43,13 +44,23 @@ class Agent:
 
         # During placement phase (first 8 turns total, 4 per player)
         if self._turn_count < 4:
+            # Step 1: Get all legal actions
+            legal_actions = get_legal_actions(self._board, self._color, self._turn_count)
+            #print("DEBUG: Here")
+            #print(legal_actions)
+            #print("\n")
+            # Step 2: Choose the best coordinate to place our stack
             match self._color:
                 case PlayerColor.RED:
                     print("Testing: RED is playing a PLACE action")
-                    return PlaceAction(Coord(0, self._turn_count))
+                    
+                    best_placing_coord = choose_coord_placement_phase(self._board, legal_actions, self._color, self._turn_count)
+                    return PlaceAction(best_placing_coord)
                 case PlayerColor.BLUE:
                     print("Testing: BLUE is playing a PLACE action")
-                    return PlaceAction(Coord(7, self._turn_count))
+
+                    best_placing_coord = choose_coord_placement_phase(self._board, legal_actions, self._color, self._turn_count)
+                    return PlaceAction(best_placing_coord)
 
         # During play phase
         match self._color:

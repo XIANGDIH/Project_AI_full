@@ -16,7 +16,7 @@ def get_legal_actions(
     # ----------------------------
     # Placement phase (first 8 turns in total, 4 per player)
     # ----------------------------
-    if total_turn_count < 8:
+    if total_turn_count < 4:
         for r in range(BOARD_N):
             for c in range(BOARD_N):
                 coord = Coord(r, c)
@@ -26,7 +26,7 @@ def get_legal_actions(
                     continue
 
                 # After the first placement turn, cannot place adjacent to opponent.
-                if total_turn_count > 0 and is_adjacent_to_opponent(board, coord, color):
+                if board is not None and is_adjacent_to_opponent(board, coord, color):
                     continue
 
                 legal_actions.append(PlaceAction(coord))
