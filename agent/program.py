@@ -6,6 +6,7 @@ from referee.game import PlayerColor, Coord, Direction, CARDINAL_DIRECTIONS, Cel
 
 from .rules import apply_action, get_legal_actions
 from .evaluation import choose_coord_placement_phase
+from .search import choose_best_action_play_phase
 
 
 class Agent:
@@ -63,13 +64,8 @@ class Agent:
                     return PlaceAction(best_placing_coord)
 
         # During play phase
-        match self._color:
-            case PlayerColor.RED:
-                print("Testing: RED is playing a MOVE action")
-                return MoveAction(Coord(0, 0), Direction.Down)
-            case PlayerColor.BLUE:
-                print("Testing: BLUE is playing a MOVE action")
-                return MoveAction(Coord(7, 0), Direction.Up)
+        print(f"Testing: {self._color} is playing a play-phase action")
+        return choose_best_action_play_phase(self._board, self._color, self._total_turn_count)
             
     def update(self, color: PlayerColor, action: Action, **referee: dict):
         """
