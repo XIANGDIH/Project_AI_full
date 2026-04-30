@@ -1,13 +1,17 @@
-# This file contains the logic about finding "EVAL"--the heuristic scoring: 
+# This file contains the logic about finding "EVAL"--the heuristic scoring for the placement phase: 
 # For the placement phase, we play by pure logic;
 # For the play phase, we build the evaluation function with features and weights.
+
 
 import random
 
 from referee.game import PlayerColor, Coord, Direction, CARDINAL_DIRECTIONS, CellState, INITIAL_STACK_HEIGHT, BOARD_N, \
     Action, PlaceAction, MoveAction, EatAction, CascadeAction
 
-from .helper import get_Manhattan_distance, in_safe_area, in_possible_area, create_triangle_attack, get_create_pattern_score, get_protection_score, get_same_line_score, get_closest_to_centre, get_nearest_enemy_distance, is_fortressed, has_edge_pressure, has_corner_pressure_get_remain_corner
+from .helper_placement import in_safe_area, in_possible_area, create_triangle_attack, get_create_pattern_score, \
+    get_protection_score, get_same_line_score, get_nearest_enemy_distance, is_fortressed, has_edge_pressure, has_corner_pressure_get_remain_corner
+from .helper import get_closest_to_centre
+
 
 # ----------------------------
 # Placement phase (first 8 turns in total, 4 per player)

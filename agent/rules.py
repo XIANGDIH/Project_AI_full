@@ -1,7 +1,9 @@
 # This file contians realizations about the rules of the Cascade game
 
+
 from referee.game import PlayerColor, Coord, Direction, CARDINAL_DIRECTIONS, CellState, INITIAL_STACK_HEIGHT, BOARD_N, \
     Action, PlaceAction, MoveAction, EatAction, CascadeAction
+
 
 def get_legal_actions(
     board: dict[Coord, CellState],
@@ -126,12 +128,14 @@ def apply_action(
     board: dict[Coord, CellState],
     color: PlayerColor,
     action: Action,
+    verbose: bool = True,
 ) -> None:
     match action:
         case PlaceAction(coord):
             board[coord] = CellState(color, INITIAL_STACK_HEIGHT)
 
-            print(f"Testing: {color} played PLACE action at {coord}")
+            if verbose:
+                print(f"Testing: {color} played PLACE action at {coord}")
         
         case MoveAction(coord, direction):
             source_coord = coord
@@ -156,9 +160,10 @@ def apply_action(
             # Original cell becomes empty (removed from sparse board dict).
             board.pop(source_coord, None)
             
-            print(f"Testing: {color} played MOVE action:")
-            print(f"  Coord: {coord}")
-            print(f"  Direction: {direction}")
+            if verbose:
+                print(f"Testing: {color} played MOVE action:")
+                print(f"  Coord: {coord}")
+                print(f"  Direction: {direction}")
 
         case EatAction(coord, direction):
             source_coord = coord
@@ -171,9 +176,10 @@ def apply_action(
             # Original cell becomes empty (removed from sparse board dict).
             board.pop(source_coord, None)
 
-            print(f"Testing: {color} played EAT action:")
-            print(f"  Coord: {coord}")
-            print(f"  Direction: {direction}")
+            if verbose:
+                print(f"Testing: {color} played EAT action:")
+                print(f"  Coord: {coord}")
+                print(f"  Direction: {direction}")
 
 
         case CascadeAction(coord, direction):
@@ -199,9 +205,10 @@ def apply_action(
                 # Then place one token of the acting player.
                 board[target_coord] = CellState(color, 1)
 
-            print(f"Testing: {color} played CASCADE action:")
-            print(f"  Coord: {coord}")
-            print(f"  Direction: {direction}")
+            if verbose:
+                print(f"Testing: {color} played CASCADE action:")
+                print(f"  Coord: {coord}")
+                print(f"  Direction: {direction}")
 
         case _:
             raise ValueError(f"Unknown action type: {action}")

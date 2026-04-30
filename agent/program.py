@@ -1,12 +1,18 @@
 # COMP30024 Artificial Intelligence, Semester 1 2026
 # Project Part B: Game Playing Agent
 
+
 from referee.game import PlayerColor, Coord, Direction, CARDINAL_DIRECTIONS, CellState, INITIAL_STACK_HEIGHT, BOARD_N, \
     Action, PlaceAction, MoveAction, EatAction, CascadeAction
 
 from .rules import apply_action, get_legal_actions
-from .evaluation import choose_coord_placement_phase
+from .evaluation_placement import choose_coord_placement_phase
+from .search import choose_action
+from .types import SeenStates
+from .helper import encode_state, record_state
 
+
+DEPTH_SEARCH = 3
 
 class Agent:
     """
@@ -30,6 +36,10 @@ class Agent:
                 print("Testing: I am playing as RED (first player)")
             case PlayerColor.BLUE:
                 print("Testing: I am playing as BLUE")
+
+        # A dictionary to keep track of all seen states
+        self._seen_states: SeenStates = {}
+        record_state(self._seen_states, self._board, self._color)
 
     def action(self, **referee: dict) -> Action:
         """
@@ -66,10 +76,10 @@ class Agent:
         match self._color:
             case PlayerColor.RED:
                 print("Testing: RED is playing a MOVE action")
-                return MoveAction(Coord(0, 0), Direction.Down)
+                return choose_action(self._board, self._color, DEPTH_SEARCH, self._total_turn_count, SeenStates)
             case PlayerColor.BLUE:
                 print("Testing: BLUE is playing a MOVE action")
-                return MoveAction(Coord(7, 0), Direction.Up)
+                return choose_action(self._board, self._color, DEPTH_SEARCH, self._total_turn_count, SeenStates)
             
     def update(self, color: PlayerColor, action: Action, **referee: dict):
         """
@@ -86,4 +96,5 @@ class Agent:
         # details of the action for demonstration purposes. You should replace
         # this with your own logic to update your agent's internal game state.
         apply_action(self._board, color, action)
-        
+
+        record_state(self._seen_states, self._board, color)
