@@ -1,7 +1,7 @@
 from enum import Enum
 
 from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N
-from .helper import get_Manhattan_distance
+from .helper import get_Manhattan_distance, get_same_direction, successful_cascade, is_adjacent
 
 
 class BoardState(Enum):
@@ -122,10 +122,45 @@ def detect_board_state (
 
 
 # ----------------------------
-# Helpers for scoring--not in use
+# Helpers for scoring
 # ----------------------------
 
 def is_adjacent_to_opponent (coord_player: Coord, coord_opponent: Coord) -> bool:
     dr = abs(coord_opponent.r - coord_player.r)
     dc = abs(coord_opponent.c - coord_player.c)
     return (dr == 1 and dc == 0) or (dr == 0 and dc == 1)
+
+def get_threat (
+    coord_player: Coord,
+    state_player: CellState,
+    coord_opponent: Coord,
+    state_opponent: CellState,
+    board: dict[Coord, CellState],
+    state: list[BoardState]
+) -> float:
+    state_impact_cascade = 0.0
+    state_impact_same_direction = 0.0
+
+    if BoardState.COMPACT_ALIGNMENT in state:
+        state_impact_cascade = 0.02
+
+    if (
+        BoardState.EDGE_CORNER_PRESSURE in state or
+        BoardState.PLAYER_SCARCITY in state or
+        BoardState.OPPONENT_SCATTERED in state
+    ):
+        state_impact_same_direction = 0.2
+
+    # Can eat right now
+    if is_adjacent(coord_player, coord_opponent) and state_player.height >= state_opponent.height:
+        return 0.1
+
+    # Check cascade pressure on this opponent stack
+    possible_direction = get_same_direction(coord_player, coord_opponent)
+    if state_player.height >= 2 and possible_direction is not None:
+        if successful_cascade(board, coord_player, state_player, coord_opponent, possible_direction):
+            return 0.1 - state_impact_cascade
+        else:
+            return 0.3 - state_impact_same_direction
+
+    return 1.0

@@ -80,7 +80,7 @@ def get_corner_label (coord: Coord) -> str | None:
 
     return None
 
-# Whether the specific victim and attacker stack pair is in the same direction, if it is get the direction
+# Whether the specific victim and attacker stack pair is in the same line, if it is get the direction of attack for the attacker
 def get_same_direction (coord_attacker: Coord, coord_victim: Coord) -> Direction | None:
     if coord_attacker == coord_victim:
         return None
@@ -92,6 +92,20 @@ def get_same_direction (coord_attacker: Coord, coord_victim: Coord) -> Direction
         return Direction.Down if coord_victim.r > coord_attacker.r else Direction.Up
 
     return None
+
+def get_opposite_direction (direction: Direction) -> Direction:
+    match direction:
+        case Direction.Up:
+            return Direction.Down
+        case Direction.Down:
+            return Direction.Up
+        case Direction.Left:
+            return Direction.Right
+        case Direction.Right:
+            return Direction.Left
+        case _:
+            print("ERROR: Finding the opposite direction")
+            return None
 
 # {Related to score calculations}
 # Count how many stacks (no matter Blue or Red) are in between of the given pair
