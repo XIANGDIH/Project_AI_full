@@ -2,6 +2,8 @@
 # It reuses old heuristic ideas in a two-player scoring style.
 
 
+import os
+
 from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N
 
 from .helper import get_same_direction, successful_cascade, is_adjacent, get_opposite_direction, is_in_same_line
@@ -13,9 +15,82 @@ from .rules import get_legal_actions
 # Main play-phase eval
 # ----------------------------
 
-def evaluate (
+DEFAULT_WEIGHTS = {
+    "f1_weight": 0.5,
+    "f2_weight": 0.5,
+    "f3_weight": 0.8,
+    "f4_weight": 1.0,
+    "f5_weight": 1.0,
+    "f6_weight": 0.2,
+}
+
+
+def _parse_weights_text(weights_text: str) -> dict[str, float] | None:
+    """
+    Read a string like "0.5,0.5,0.8,1.0,1.0,0.2" and map it to f1..f6 weights.
+    """
+    parts_raw = weights_text.split(",")
+    parts: list[str] = []
+
+    for part in parts_raw:
+        clean_part = part.strip()
+        if clean_part != "":
+            parts.append(clean_part)
+
+    if len(parts) != 6:
+        return None
+
+    values: list[float] = []
+    try:
+        for part in parts:
+            values.append(float(part))
+    except ValueError:
+        return None
+
+    parsed_weights = {
+        "f1_weight": values[0],
+        "f2_weight": values[1],
+        "f3_weight": values[2],
+        "f4_weight": values[3],
+        "f5_weight": values[4],
+        "f6_weight": values[5],
+    }
+    return parsed_weights
+
+
+def get_weights_for_color(color: PlayerColor) -> dict[str, float]:
+    """
+    Load weights from environment variables.
+    Priority:
+    1) AGENTMM_WEIGHTS_RED / AGENTMM_WEIGHTS_BLUE
+    2) AGENTMM_WEIGHTS
+    3) DEFAULT_WEIGHTS
+    """
+    if color == PlayerColor.RED:
+        env_key = "AGENTMM_WEIGHTS_RED"
+    else:
+        env_key = "AGENTMM_WEIGHTS_BLUE"
+
+    text_for_color = os.getenv(env_key)
+    if text_for_color is not None:
+        parsed = _parse_weights_text(text_for_color)
+        if parsed is not None:
+            return parsed
+
+    text_shared = os.getenv("AGENTMM_WEIGHTS")
+    if text_shared is not None:
+        parsed = _parse_weights_text(text_shared)
+        if parsed is not None:
+            return parsed
+
+    return dict(DEFAULT_WEIGHTS)
+
+
+def evaluate(
     board: dict[Coord, CellState],
-    color: PlayerColor
+    color: PlayerColor,
+    total_turn_count: int | None = None,
+    weights: dict[str, float] | None = None
 ) -> float:
     """
     Higher score means a better board for this player.
@@ -68,11 +143,11 @@ def evaluate (
 
         for coord_player, state_player in player_stacks:
             # Distance term.
-            d = abs(coord_opponent.r - coord_player.r) + abs(coord_opponent.c - coord_player.c)
-            best_dist = min(best_dist, d)
+            distance_value = abs(coord_opponent.r - coord_player.r) + abs(coord_opponent.c - coord_player.c)
+            best_dist = min(best_dist, distance_value)
             # Threat term.
-            t = get_threat(coord_player, state_player, coord_opponent, state_opponent, board, state)
-            best_threat = min(best_threat, t)
+            threat_value = get_threat(coord_player, state_player, coord_opponent, state_opponent, board, state)
+            best_threat = min(best_threat, threat_value)
 
         total_dist += best_dist
         total_threat += best_threat
@@ -189,7 +264,8 @@ def get_f6_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks:
 def get_feature_breakdown(
     board: dict[Coord, CellState],
     color: PlayerColor,
-    total_turn_count: int
+    total_turn_count: int,
+    weights: dict[str, float] | None = None
 ) -> dict[str, float]:
     """
     Compute all feature values for the current board.
@@ -219,12 +295,26 @@ def get_feature_breakdown(
         "f5_cascade_diff": feature5_cascade_diff,
         "f6_same_line_diff": feature6_same_line_diff,
     }
+    if weights is None:
+        weights = get_weights_for_color(color)
+
+    weighted_total = (
+        weights["f1_weight"] * feature_map["f1_stack_num_diff"]
+        + weights["f2_weight"] * feature_map["f2_stack_height_diff"]
+        + weights["f3_weight"] * feature_map["f3_legal_action_diff"]
+        + weights["f4_weight"] * feature_map["f4_eat_diff"]
+        + weights["f5_weight"] * feature_map["f5_cascade_diff"]
+        + weights["f6_weight"] * feature_map["f6_same_line_diff"]
+    )
+    feature_map["weighted_total"] = weighted_total
+
     return feature_map
     
 def evaluate_new (
     board: dict[Coord, CellState],
     color: PlayerColor,
-    total_turn_count: int
+    total_turn_count: int,
+    weights: dict[str, float] | None = None
 ) -> float:
     """
     Higher score means a better board for this player.
@@ -244,35 +334,8 @@ def evaluate_new (
     if not player_stacks:
         return -1000000.0
 
-    # Default weights.
-    f1_weight = 0.5
-    f2_weight = 0.5
-    f3_weight = 0.8
-    f4_weight = 1.0
-    f5_weight = 1.0
-    f6_weight = 0.2
-
-    # Board-pattern adjustment (still needs cleanup later).
-    state = detect_board_state(opponent_stacks, player_stacks)
-    if BoardState.COMPACT_ALIGNMENT in state:
-        if BoardState.PLAYER_SCARCITY in state:
-            dist_weight -= 0.06
-            threat_weight += 0.065
-        else:
-            dist_weight -= 0.05
-            threat_weight += 0.06
-
-    elif BoardState.OPPONENT_SCATTERED in state:
-        if BoardState.PLAYER_SCARCITY in state:
-            dist_weight += 0.02
-            threat_weight += 0.01
-        else:
-            dist_weight += 0.03
-            threat_weight -= 0.04
-
-    elif BoardState.PLAYER_SCARCITY in state:
-        dist_weight -= 0.02
-        threat_weight += 0.04
+    if weights is None:
+        weights = get_weights_for_color(color)
 
     # Compute each feature score.
     feature1_stack_num_diff = get_f1_score(opponent_stacks, player_stacks)
@@ -283,10 +346,10 @@ def evaluate_new (
     feature6_same_line_diff = get_f6_score(opponent_stacks, player_stacks)
 
     return (
-        + f1_weight * feature1_stack_num_diff
-        + f2_weight * feature2_stack_height_diff
-        + f3_weight * feature3_legal_action_diff
-        + f4_weight * feature4_eat_diff
-        + f5_weight * feature5_cascade_diff
-        + f6_weight * feature6_same_line_diff
+        + weights["f1_weight"] * feature1_stack_num_diff
+        + weights["f2_weight"] * feature2_stack_height_diff
+        + weights["f3_weight"] * feature3_legal_action_diff
+        + weights["f4_weight"] * feature4_eat_diff
+        + weights["f5_weight"] * feature5_cascade_diff
+        + weights["f6_weight"] * feature6_same_line_diff
     )

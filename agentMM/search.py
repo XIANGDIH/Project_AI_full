@@ -3,7 +3,7 @@
 
 from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N, Action
 from .rules import get_legal_actions
-from .evaluation_play import evaluate
+from .evaluation_play import evaluate_new
 from .rules import apply_action
 from .types import SeenStates
 from .helper import encode_state, record_state
@@ -13,7 +13,14 @@ from .helper import encode_state, record_state
 # Implementation of MINIMAX
 # ----------------------------
 
-def choose_action(board: dict[Coord, CellState], my_color: PlayerColor, depth: int, total_turn_count: int, seen_states: SeenStates) -> Action:
+def choose_action(
+    board: dict[Coord, CellState],
+    my_color: PlayerColor,
+    depth: int,
+    total_turn_count: int,
+    seen_states: SeenStates,
+    weights: dict[str, float]
+) -> Action:
     score, best_action = minimax(
         board=board,
         depth=depth,
@@ -22,11 +29,22 @@ def choose_action(board: dict[Coord, CellState], my_color: PlayerColor, depth: i
         maximizing=True,
         my_color=my_color,
         total_turn_count=total_turn_count,
-        seen_states=seen_states
+        seen_states=seen_states,
+        weights=weights
     )
     return best_action
 
-def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float, maximizing: bool, my_color: PlayerColor, total_turn_count: int, seen_states: SeenStates) -> tuple[int, Action]:
+def minimax(
+    board: dict[Coord, CellState],
+    depth: int,
+    alpha: float,
+    beta: float,
+    maximizing: bool,
+    my_color: PlayerColor,
+    total_turn_count: int,
+    seen_states: SeenStates,
+    weights: dict[str, float]
+) -> tuple[int, Action]:
     """
     Using DFS to implement the MINIMAX strategy with alpha-beta pruning as cut-offs
     Returns (score, best_action)
@@ -36,14 +54,14 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
 
     # Base case
     if depth == 0 or is_terminal(board, total_turn_count, seen_states, current_color):
-        return evaluate(board, my_color), None
+        return evaluate_new(board, my_color, total_turn_count, weights), None
 
     # Decide whose turn is it and get all legal actions (a list of actions) for this turn
     legal_actions = get_legal_actions(board, current_color, total_turn_count)
 
     # Defensive check
     if not legal_actions:
-        return evaluate(board, my_color), None
+        return evaluate_new(board, my_color, total_turn_count, weights), None
 
     # The action we are going to return for this tree
     best_action = None
@@ -68,7 +86,8 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
                 False,
                 my_color,
                 total_turn_count,
-                seen_states
+                seen_states,
+                weights
             )
 
             # Step 3: Check whether the new evaluation value gives a better score, update it if it gives
@@ -101,7 +120,8 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
                 True,
                 my_color,
                 total_turn_count,
-                seen_states
+                seen_states,
+                weights
             )
 
             if score < best_score:
@@ -122,8 +142,15 @@ def copy_state(state):
 
 def is_terminal(board: dict[Coord, CellState], total_turn_count: int, seen_states: SeenStates, color: PlayerColor) -> bool:
     # Termination condition 1: All of a player's tokens are removed
-    blue_stacks = [(c, s) for c, s in board.items() if s.color == PlayerColor.BLUE]
-    red_stacks = [(c, s) for c, s in board.items() if s.color == PlayerColor.RED]
+    blue_stacks: list[tuple[Coord, CellState]] = []
+    red_stacks: list[tuple[Coord, CellState]] = []
+
+    for coord, cell_state in board.items():
+        if cell_state.color == PlayerColor.BLUE:
+            blue_stacks.append((coord, cell_state))
+        else:
+            red_stacks.append((coord, cell_state))
+
     if len(blue_stacks) == 0 or len(red_stacks) == 0:
         return True
     

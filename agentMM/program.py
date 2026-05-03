@@ -8,7 +8,7 @@ from referee.game import PlayerColor, Coord, Direction, CARDINAL_DIRECTIONS, Cel
 from .rules import apply_action, get_legal_actions
 from .evaluation_placement import choose_coord_placement_phase
 from .search import choose_action
-from .evaluation_play import get_feature_breakdown
+from .evaluation_play import get_feature_breakdown, get_weights_for_color
 from .types import SeenStates
 from .helper import encode_state, record_state
 from .logging_utils import log_json
@@ -42,10 +42,12 @@ class Agent:
         # Track repeated board states for repetition checks.
         self._seen_states: SeenStates = {}
         record_state(self._seen_states, self._board, self._color)
+        self._weights = get_weights_for_color(self._color)
 
         init_data = {
             "player": str(self._color),
             "depth_search": DEPTH_SEARCH,
+            "weights": self._weights,
         }
         log_json("agent_init", init_data)
 
@@ -127,7 +129,12 @@ class Agent:
                     return action
 
         # Play phase starts here.
-        feature_map = get_feature_breakdown(self._board, self._color, self._total_turn_count)
+        feature_map = get_feature_breakdown(
+            self._board,
+            self._color,
+            self._total_turn_count,
+            self._weights,
+        )
         log_json(
             "feature_snapshot",
             {
@@ -136,13 +143,21 @@ class Agent:
                 "my_turn_index": self._turn_count + 1,
                 "total_turn_index": self._total_turn_count + 1,
                 "features": feature_map,
+                "weights": self._weights,
             },
         )
 
         match self._color:
             case PlayerColor.RED:
                 print("Testing: RED is playing a MOVE action")
-                action = choose_action(self._board, self._color, DEPTH_SEARCH, self._total_turn_count, self._seen_states)
+                action = choose_action(
+                    self._board,
+                    self._color,
+                    DEPTH_SEARCH,
+                    self._total_turn_count,
+                    self._seen_states,
+                    self._weights,
+                )
                 log_json(
                     "turn_decision",
                     {
@@ -151,12 +166,20 @@ class Agent:
                         "my_turn_index": self._turn_count + 1,
                         "total_turn_index": self._total_turn_count + 1,
                         "chosen_action": self._action_to_text(action),
+                        "weights": self._weights,
                     },
                 )
                 return action
             case PlayerColor.BLUE:
                 print("Testing: BLUE is playing a MOVE action")
-                action = choose_action(self._board, self._color, DEPTH_SEARCH, self._total_turn_count, self._seen_states)
+                action = choose_action(
+                    self._board,
+                    self._color,
+                    DEPTH_SEARCH,
+                    self._total_turn_count,
+                    self._seen_states,
+                    self._weights,
+                )
                 log_json(
                     "turn_decision",
                     {
@@ -165,6 +188,7 @@ class Agent:
                         "my_turn_index": self._turn_count + 1,
                         "total_turn_index": self._total_turn_count + 1,
                         "chosen_action": self._action_to_text(action),
+                        "weights": self._weights,
                     },
                 )
                 return action
