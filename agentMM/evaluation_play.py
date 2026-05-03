@@ -1,5 +1,5 @@
-# This file contains the logic about finding "EVAL" for the play phase.
-# We reuse old heuristic ideas, but adapt them for two-player evaluation.
+# This file holds play-phase evaluation logic.
+# It reuses old heuristic ideas in a two-player scoring style.
 
 
 from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N
@@ -10,7 +10,7 @@ from .rules import get_legal_actions
 
 
 # ----------------------------
-# Main eval for play phase
+# Main play-phase eval
 # ----------------------------
 
 def evaluate (
@@ -18,12 +18,18 @@ def evaluate (
     color: PlayerColor
 ) -> float:
     """
-    Bigger score = better board for this player.
+    Higher score means a better board for this player.
     """
-    player_stacks = [(c, s) for c, s in board.items() if s.color == color]
-    opponent_stacks = [(c, s) for c, s in board.items() if s.color == color.opponent]
+    player_stacks: list[tuple[Coord, CellState]] = []
+    opponent_stacks: list[tuple[Coord, CellState]] = []
 
-    # Quick win/lose checks
+    for coord, cell_state in board.items():
+        if cell_state.color == color:
+            player_stacks.append((coord, cell_state))
+        else:
+            opponent_stacks.append((coord, cell_state))
+
+    # Quick win/lose checks.
     if not opponent_stacks:
         return 1000000.0
     if not player_stacks:
@@ -32,7 +38,7 @@ def evaluate (
     dist_weight = 0.1
     threat_weight = 0.5
 
-    # Adjust weights based on current board pattern
+    # Tweak weights based on the current board pattern.
     state = detect_board_state(opponent_stacks, player_stacks)
     if BoardState.COMPACT_ALIGNMENT in state:
         if BoardState.PLAYER_SCARCITY in state:
@@ -61,17 +67,17 @@ def evaluate (
         best_threat = float("inf")
 
         for coord_player, state_player in player_stacks:
-            # Distance
+            # Distance term.
             d = abs(coord_opponent.r - coord_player.r) + abs(coord_opponent.c - coord_player.c)
             best_dist = min(best_dist, d)
-            # Threat
+            # Threat term.
             t = get_threat(coord_player, state_player, coord_opponent, state_opponent, board, state)
             best_threat = min(best_threat, t)
 
         total_dist += best_dist
         total_threat += best_threat
 
-    # Old heuristic was "lower is better"; we flip it to "higher is better".
+    # Old version was "lower is better", so we flip the sign here.
     return -(
         len(opponent_stacks)
         + dist_weight * total_dist
@@ -79,56 +85,54 @@ def evaluate (
     )
 
 
-# {Features}
-# Feature 1: Difference between the stack number on the board
+# Feature 1: stack count difference
 def get_f1_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> float:
     return len(player_stacks) - len(opponent_stacks)
 
-# Feature 2: Difference between the total stack height on the board
+# Feature 2: total stack height difference
 def get_f2_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> float:
-    # Get the total height of stacks for our player
+    # Sum up our total stack height.
     total_height_player = 0.0
     for _, state_player in player_stacks:
         total_height_player += state_player.height
 
-    # Get the total height of stacks for the opponent
+    # Sum up opponent total stack height.
     total_height_opponent = 0.0
     for _, state_opponent in opponent_stacks:
         total_height_opponent += state_opponent.height
     
     return total_height_player - total_height_opponent
 
-# Feature 3: Difference between the total legal actions that could be considered for the current board
-# This might be expensive
+# Feature 3: legal action count difference
+# This one can be expensive.
 def get_f3_score (board: dict[Coord, CellState], color_player: PlayerColor, total_turn_count: int) -> float:
-    # Find the opponent's color
+    # Figure out opponent color.
     color_opponent = None
     if color_player == PlayerColor.RED:
         color_opponent = PlayerColor.BLUE
     else:
         color_opponent = PlayerColor.RED
     
-    # Get legal actions for our player
+    # Count legal actions for us.
     actions_player = get_legal_actions(board, color_player, total_turn_count)
     
-    # Get legal actionf for the opponent player
+    # Count legal actions for opponent.
     actions_opponent = get_legal_actions(board, color_opponent, total_turn_count)
 
     return len(actions_player) - len(actions_opponent)
 
-# Feature 4: Difference between the direct EAT for the current board
+# Feature 4: direct EAT chance difference
 def get_f4_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> float:
     opponent_eat = []
     player_eat = []
 
     for coord_opponent, state_opponent in opponent_stacks:
         for coord_player, state_player in player_stacks:
-            # Check whether they are adjacent
+            # Skip if they are not adjacent.
             if not is_adjacent(coord_opponent, coord_player):
                 continue
             else:
-                # They are adjacent, compare their height
-                # Since the next turn is my opponent's turn--if the height is similar, it should be considered as the opponent's strength--?
+                # They are adjacent, so compare heights.
                 if state_opponent.height < state_player.height:
                     player_eat.append((coord_player, state_player))
                 else:
@@ -136,7 +140,7 @@ def get_f4_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks:
     
     return len(player_eat) - len(opponent_eat)
 
-# Feature 5: Difference between the direct Casecade count for the current board
+# Feature 5: direct CASCADE chance difference
 def get_f5_score (board: dict[Coord, CellState], opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> float:
     opponent_cascade = []
     player_cascade = []
@@ -146,39 +150,76 @@ def get_f5_score (board: dict[Coord, CellState], opponent_stacks: list[tuple[Coo
         for coord_player, state_player in player_stacks:
             cascade_direction_player = get_same_direction(coord_player, coord_opponent)
 
-            # Check whether they are on the same line
+            # Must be on the same row or column.
             if cascade_direction_player == None:
                 continue
 
-            # There are on the same line, and we get the direction for regarding our player as the attacker first
-            # Get the opposite direction
+            # Get the reverse direction for the opponent side.
             cascade_direction_opponent = get_opposite_direction(cascade_direction_player)
-            # Check whether our player can play a successful cascade
+            # Check if our cascade can directly remove them.
             if successful_cascade(board, coord_player, state_player, coord_opponent, cascade_direction_player):
                 player_cascade.append((coord_player, state_player))
-            # Check whether the opponent can play a successful cascade
+            # Check if opponent can directly remove us.
             if successful_cascade(board, coord_opponent, state_opponent, coord_player, cascade_direction_opponent):
                 opponent_cascade.append((coord_opponent, state_opponent))
     
     return len(player_cascade) - len(opponent_cascade)
 
-# Feature 6: Difference between the meaningful same-line count for the current board--this is use as an additional feature
+# Feature 6: useful same-line pressure difference
 def get_f6_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> float:
     opponent_same_line = []
     player_same_line = []
 
     for coord_opponent, state_opponent in opponent_stacks:
         for coord_player, state_player in player_stacks:
-            # Check whether they are on the same line
+            # Only care about same row or column.
             is_same_line = is_in_same_line(coord_player, coord_opponent)
             if not is_same_line:
                 continue
 
-            # Since the next turn is my opponent's turn--if the height is similar, it should be considered as the opponent's strength--?
+            # If our stack is taller, count it for us; otherwise for opponent.
             if state_player.height > state_opponent.height:
                 player_same_line.append((coord_player, state_player))
             else:
                 opponent_same_line.append((coord_opponent, state_opponent))
+
+    return len(player_same_line) - len(opponent_same_line)
+
+
+def get_feature_breakdown(
+    board: dict[Coord, CellState],
+    color: PlayerColor,
+    total_turn_count: int
+) -> dict[str, float]:
+    """
+    Compute all feature values for the current board.
+    We use this for logging and weight tuning.
+    """
+    player_stacks: list[tuple[Coord, CellState]] = []
+    opponent_stacks: list[tuple[Coord, CellState]] = []
+
+    for coord, cell_state in board.items():
+        if cell_state.color == color:
+            player_stacks.append((coord, cell_state))
+        else:
+            opponent_stacks.append((coord, cell_state))
+
+    feature1_stack_num_diff = get_f1_score(opponent_stacks, player_stacks)
+    feature2_stack_height_diff = get_f2_score(opponent_stacks, player_stacks)
+    feature3_legal_action_diff = get_f3_score(board, color, total_turn_count)
+    feature4_eat_diff = get_f4_score(opponent_stacks, player_stacks)
+    feature5_cascade_diff = get_f5_score(board, opponent_stacks, player_stacks)
+    feature6_same_line_diff = get_f6_score(opponent_stacks, player_stacks)
+
+    feature_map = {
+        "f1_stack_num_diff": feature1_stack_num_diff,
+        "f2_stack_height_diff": feature2_stack_height_diff,
+        "f3_legal_action_diff": feature3_legal_action_diff,
+        "f4_eat_diff": feature4_eat_diff,
+        "f5_cascade_diff": feature5_cascade_diff,
+        "f6_same_line_diff": feature6_same_line_diff,
+    }
+    return feature_map
     
 def evaluate_new (
     board: dict[Coord, CellState],
@@ -186,18 +227,24 @@ def evaluate_new (
     total_turn_count: int
 ) -> float:
     """
-    Bigger score = better board for this player.
+    Higher score means a better board for this player.
     """
-    player_stacks = [(c, s) for c, s in board.items() if s.color == color]
-    opponent_stacks = [(c, s) for c, s in board.items() if s.color == color.opponent]
+    player_stacks: list[tuple[Coord, CellState]] = []
+    opponent_stacks: list[tuple[Coord, CellState]] = []
 
-    # Quick win/lose checks
+    for coord, cell_state in board.items():
+        if cell_state.color == color:
+            player_stacks.append((coord, cell_state))
+        else:
+            opponent_stacks.append((coord, cell_state))
+
+    # Quick win/lose checks.
     if not opponent_stacks:
         return 1000000.0
     if not player_stacks:
         return -1000000.0
 
-    # The original weights
+    # Default weights.
     f1_weight = 0.5
     f2_weight = 0.5
     f3_weight = 0.8
@@ -205,7 +252,7 @@ def evaluate_new (
     f5_weight = 1.0
     f6_weight = 0.2
 
-    # Adjust weights based on current board pattern--need to be updated
+    # Board-pattern adjustment (still needs cleanup later).
     state = detect_board_state(opponent_stacks, player_stacks)
     if BoardState.COMPACT_ALIGNMENT in state:
         if BoardState.PLAYER_SCARCITY in state:
@@ -227,7 +274,7 @@ def evaluate_new (
         dist_weight -= 0.02
         threat_weight += 0.04
 
-    # Get the scores for eac feature
+    # Compute each feature score.
     feature1_stack_num_diff = get_f1_score(opponent_stacks, player_stacks)
     feature2_stack_height_diff = get_f2_score(opponent_stacks,player_stacks)
     feature3_legal_action_diff = get_f3_score(board, color, total_turn_count)
@@ -243,6 +290,3 @@ def evaluate_new (
         + f5_weight * feature5_cascade_diff
         + f6_weight * feature6_same_line_diff
     )
-
-
-
