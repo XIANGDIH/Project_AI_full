@@ -3,7 +3,7 @@
 
 from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N, Action
 from .rules import get_legal_actions
-from .evaluation_play import evaluate
+from .evaluation_play import evaluate, evaluate_new
 from .rules import apply_action
 from .types import SeenStates
 from .helper import encode_state, record_state
@@ -36,14 +36,14 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
 
     # Base case
     if depth == 0 or is_terminal(board, total_turn_count, seen_states, current_color):
-        return evaluate(board, my_color), None
+        return evaluate_new(board, my_color, total_turn_count), None
 
     # Decide whose turn is it and get all legal actions (a list of actions) for this turn
     legal_actions = get_legal_actions(board, current_color, total_turn_count)
 
     # Defensive check
     if not legal_actions:
-        return evaluate(board, my_color), None
+        return evaluate_new(board, my_color, total_turn_count), None
 
     # The action we are going to return for this tree
     best_action = None

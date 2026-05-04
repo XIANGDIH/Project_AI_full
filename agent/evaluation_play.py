@@ -5,7 +5,7 @@
 from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N
 
 from .helper import get_same_direction, successful_cascade, is_adjacent, get_opposite_direction, is_in_same_line
-from .helper_play import BoardState, detect_board_state, get_threat
+from .helper_play import BoardState, detect_board_state, get_threat, get_total_dist_to_edge
 from .rules import get_legal_actions
 
 
@@ -80,11 +80,11 @@ def evaluate (
 
 
 # {Features}
-# Feature 1: Difference between the stack number on the board
+# Feature 1: Difference in the stack number on the board
 def get_f1_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> float:
     return len(player_stacks) - len(opponent_stacks)
 
-# Feature 2: Difference between the total stack height on the board
+# Feature 2: Difference in the total stack height on the board
 def get_f2_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> float:
     # Get the total height of stacks for our player
     total_height_player = 0.0
@@ -98,7 +98,7 @@ def get_f2_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks:
     
     return total_height_player - total_height_opponent
 
-# Feature 3: Difference between the total legal actions that could be considered for the current board
+# Feature 3: Difference in the total legal actions that could be considered for the current board
 # This might be expensive
 def get_f3_score (board: dict[Coord, CellState], color_player: PlayerColor, total_turn_count: int) -> float:
     # Find the opponent's color
@@ -116,7 +116,7 @@ def get_f3_score (board: dict[Coord, CellState], color_player: PlayerColor, tota
 
     return len(actions_player) - len(actions_opponent)
 
-# Feature 4: Difference between the direct EAT for the current board
+# Feature 4: Difference in the direct EAT for the current board
 def get_f4_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> float:
     opponent_eat = []
     player_eat = []
@@ -136,7 +136,7 @@ def get_f4_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks:
     
     return len(player_eat) - len(opponent_eat)
 
-# Feature 5: Difference between the direct Casecade count for the current board
+# Feature 5: Difference in the direct Casecade count for the current board
 def get_f5_score (board: dict[Coord, CellState], opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> float:
     opponent_cascade = []
     player_cascade = []
@@ -162,7 +162,7 @@ def get_f5_score (board: dict[Coord, CellState], opponent_stacks: list[tuple[Coo
     
     return len(player_cascade) - len(opponent_cascade)
 
-# Feature 6: Difference between the meaningful same-line count for the current board--this is use as an additional feature
+# Feature 6: Difference in the meaningful same-line count for the current board--this is use as an additional feature
 def get_f6_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> float:
     opponent_same_line = []
     player_same_line = []
@@ -179,6 +179,18 @@ def get_f6_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks:
                 player_same_line.append((coord_player, state_player))
             else:
                 opponent_same_line.append((coord_opponent, state_opponent))
+    
+    return len(player_same_line) - len(opponent_same_line)
+
+# Feature 7: Difference in average safety distance from nearest edge
+def get_f7_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> float:
+    player_total_dist = get_total_dist_to_edge(player_stacks)
+    opponent_total_dist = get_total_dist_to_edge(opponent_stacks)
+
+    player_average = player_total_dist / len(player_stacks)
+    opponent_average = opponent_total_dist / len(opponent_stacks)
+
+    return player_average - opponent_average
     
 def evaluate_new (
     board: dict[Coord, CellState],
@@ -198,34 +210,45 @@ def evaluate_new (
         return -1000000.0
 
     # The original weights
-    f1_weight = 0.5
-    f2_weight = 0.5
-    f3_weight = 0.8
-    f4_weight = 1.0
-    f5_weight = 1.0
-    f6_weight = 0.2
+    f1_weight = 20.0
+    f2_weight = 5.0
+    f3_weight = 0.5
+    f4_weight = 15.0
+    f5_weight = 10.0
+    f6_weight = 1.0
+    f7_weight = 2.0
 
     # Adjust weights based on current board pattern--need to be updated
     state = detect_board_state(opponent_stacks, player_stacks)
     if BoardState.COMPACT_ALIGNMENT in state:
         if BoardState.PLAYER_SCARCITY in state:
-            dist_weight -= 0.06
-            threat_weight += 0.065
+            f1_weight += 0.3 * 20
+            f2_weight += 0.3 * 1
         else:
-            dist_weight -= 0.05
-            threat_weight += 0.06
+            f2_weight += 0.2 * 1
+
+        if BoardState.EDGE_CORNER_PRESSURE in state:
+            f5_weight += 3.0
+            f7_weight += 0.2 * 2
 
     elif BoardState.OPPONENT_SCATTERED in state:
         if BoardState.PLAYER_SCARCITY in state:
-            dist_weight += 0.02
-            threat_weight += 0.01
+            f1_weight += 0.2 * 20
+            f2_weight += 0.1 * 1
+            f6_weight += 0.3 * 1
         else:
-            dist_weight += 0.03
-            threat_weight -= 0.04
+            f6_weight += 0.4 * 1
 
-    elif BoardState.PLAYER_SCARCITY in state:
-        dist_weight -= 0.02
-        threat_weight += 0.04
+        if BoardState.EDGE_CORNER_PRESSURE in state:
+            f5_weight += 5.0
+            f7_weight += 0.3 * 2
+
+    if BoardState.PLAYER_SCARCITY in state:
+        f1_weight += 0.3 * 20
+        f2_weight += 0.2 * 1
+    if BoardState.EDGE_CORNER_PRESSURE in state:
+            f5_weight += 3.0
+            f7_weight += 0.2 * 2
 
     # Get the scores for eac feature
     feature1_stack_num_diff = get_f1_score(opponent_stacks, player_stacks)
@@ -234,6 +257,7 @@ def evaluate_new (
     feature4_eat_diff = get_f4_score(opponent_stacks, player_stacks)
     feature5_cascade_diff = get_f5_score(board, opponent_stacks, player_stacks)
     feature6_same_line_diff = get_f6_score(opponent_stacks, player_stacks)
+    feature7_average_edge_dist_diff = get_f7_score(opponent_stacks, player_stacks)
 
     return (
         + f1_weight * feature1_stack_num_diff
@@ -242,6 +266,7 @@ def evaluate_new (
         + f4_weight * feature4_eat_diff
         + f5_weight * feature5_cascade_diff
         + f6_weight * feature6_same_line_diff
+        + f7_weight * feature7_average_edge_dist_diff
     )
 
 

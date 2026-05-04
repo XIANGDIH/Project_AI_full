@@ -35,6 +35,14 @@ def is_on_edge (coord: Coord) -> bool:
         coord.c == 0 or coord.c == BOARD_N - 1
     )
 
+def get_distance_to_edge_shortest (coord: Coord) -> float:
+    dist_top_edge = coord.r - 0
+    dist_bottom_edge = 7 - coord.r
+    dist_left_edge = coord.c - 0
+    dist_right_edge = 7 - coord.c
+
+    return min(dist_top_edge, dist_bottom_edge, dist_left_edge, dist_right_edge)
+
 def get_distance_to_centre (coord: Coord) -> float:
     centre_r = 3.5
     centre_c = 3.5
