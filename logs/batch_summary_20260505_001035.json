@@ -1,0 +1,15 @@
+{
+  "agent": "agentMM",
+  "games_per_side": 30,
+  "total_games": 60,
+  "weights_a": "0.9,0.5,0.6,1.35,1.35,0.1",
+  "weights_b": "0.5,0.5,0.8,1.0,1.0,0.2",
+  "red_wins": 0,
+  "blue_wins": 0,
+  "draws": 60,
+  "unknown_results": 0,
+  "failed_runs": 0,
+  "red_win_rate": 0.0,
+  "blue_win_rate": 0.0,
+  "draw_rate": 1.0
+}

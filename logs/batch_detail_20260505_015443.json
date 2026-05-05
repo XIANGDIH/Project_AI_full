@@ -1,0 +1,602 @@
+[
+  {
+    "game_index": 1,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0001.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 2,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0002.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 3,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0003.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 4,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0004.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 5,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0005.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 6,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0006.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 7,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0007.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 8,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0008.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 9,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0009.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 10,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0010.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 11,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0011.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 12,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0012.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 13,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0013.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 14,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0014.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 15,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0015.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 16,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0016.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 17,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0017.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 18,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0018.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 19,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0019.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 20,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0020.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 21,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0021.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 22,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0022.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 23,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0023.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 24,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0024.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 25,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0025.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 26,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0026.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 27,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0027.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 28,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0028.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 29,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0029.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 30,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "blue_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0030.txt",
+    "unknown_output_file": null,
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 31,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0031.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 32,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0032.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 33,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0033.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 34,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0034.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 35,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0035.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 36,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0036.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 37,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0037.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 38,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0038.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 39,
+    "return_code": 0,
+    "winner": "BLUE",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0039.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 40,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0040.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 41,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0041.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 42,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0042.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 43,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0043.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 44,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0044.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 45,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0045.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 46,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0046.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 47,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0047.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 48,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0048.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 49,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0049.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 50,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0050.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 51,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0051.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 52,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0052.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 53,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0053.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 54,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0054.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 55,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0055.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 56,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0056.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 57,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0057.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 58,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0058.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 59,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0059.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  },
+  {
+    "game_index": 60,
+    "return_code": 0,
+    "winner": "DRAW",
+    "red_weights": "0.5,0.5,0.8,1.0,1.0,0.2",
+    "blue_weights": "0.8,0.6,0.6,1.3,1.4,0.0",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0060.txt",
+    "unknown_output_file": null,
+    "side_setup": "B_as_RED_A_as_BLUE"
+  }
+]
