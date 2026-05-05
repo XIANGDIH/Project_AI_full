@@ -9,6 +9,7 @@ class BoardState(Enum):
     EDGE_CORNER_PRESSURE = 2
     PLAYER_SCARCITY = 3
     OPPONENT_SCATTERED = 4
+    OPPONENT_FEW_REMAIN = 5
 
 # ----------------------------
 # Helpers to read board patterns
@@ -117,6 +118,10 @@ def detect_board_state (
 
     if scatter_pair_count >= 3 and dense_pair_count == 0:
         detected_state.append(BoardState.OPPONENT_SCATTERED)
+
+    # C: We the opponent is behind in stack count--the board is favrible for us already
+    if len(player_stacks) - len(opponent_stacks) >= 2:
+        detected_state.append(BoardState.OPPONENT_FEW_REMAIN)
 
     return detected_state
 

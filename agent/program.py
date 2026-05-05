@@ -9,9 +9,9 @@ from .rules import apply_action, get_legal_actions
 from .evaluation_placement import choose_coord_placement_phase
 from .search import choose_action
 from .types import SeenStates
-from .helper import encode_state, record_state
+from .helper import encode_state, record_state, successful_cascade
 
-
+verbose: bool = False
 DEPTH_SEARCH = 4
 
 class Agent:
@@ -33,9 +33,11 @@ class Agent:
         self._total_turn_count = 0
         match color:
             case PlayerColor.RED:
-                print("Testing: I am playing as RED (first player)")
+                if verbose:
+                    print("Testing: I am playing as RED (first player)")
             case PlayerColor.BLUE:
-                print("Testing: I am playing as BLUE")
+                if verbose:
+                    print("Testing: I am playing as BLUE")
 
         # A dictionary to keep track of all seen states
         self._seen_states: SeenStates = {}
@@ -75,10 +77,12 @@ class Agent:
         # During play phase
         match self._color:
             case PlayerColor.RED:
-                print("Testing: RED is playing a MOVE action")
+                if verbose:
+                    print("Testing: RED is playing a MOVE action")
                 return choose_action(self._board, self._color, DEPTH_SEARCH, self._total_turn_count, SeenStates)
             case PlayerColor.BLUE:
-                print("Testing: BLUE is playing a MOVE action")
+                if verbose:
+                    print("Testing: BLUE is playing a MOVE action")
                 return choose_action(self._board, self._color, DEPTH_SEARCH, self._total_turn_count, SeenStates)
             
     def update(self, color: PlayerColor, action: Action, **referee: dict):
@@ -95,6 +99,6 @@ class Agent:
         # Below we check which type of action was played and print out the
         # details of the action for demonstration purposes. You should replace
         # this with your own logic to update your agent's internal game state.
-        apply_action(self._board, color, action)
+        apply_action(self._board, color, action, False)
 
         record_state(self._seen_states, self._board, color)

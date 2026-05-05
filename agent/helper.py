@@ -202,6 +202,21 @@ def successful_cascade (board: dict[Coord, CellState], coord_attacker: Coord, st
 
     return is_successful
 
+# Whether the cascade action of the specific stack is meaningful (there is at least one opponent stack at the same direction of the cascade)
+# This is a weaker version
+def meaningful_cascade (coord_attacker: Coord, state_attacker: CellState, stacks_victim: list[tuple[Coord, CellState]], direction: Direction) -> bool:
+
+    # Whether the height of the attacking stack we are looking at is >= 2
+    if state_attacker.height < 2:
+        return False
+    
+    for coord_victim, _ in stacks_victim:
+        if is_in_direction_path(coord_attacker, coord_victim, direction):
+            #print("DEBUG: Here\n")
+            return True
+    
+    return False
+
 def encode_state(board: dict[Coord, CellState]) -> tuple:
     return tuple(sorted(
         (coord.r, coord.c, cell.color, cell.height)

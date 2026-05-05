@@ -1,12 +1,12 @@
 # This file contains the logic about the game play-strategy for the play phase.
 
 
-from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N, Action
+from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N, Action, CascadeAction
 from .rules import get_legal_actions
 from .evaluation_play import evaluate, evaluate_new
 from .rules import apply_action
 from .types import SeenStates
-from .helper import encode_state, record_state
+from .helper import encode_state, record_state, meaningful_cascade
 
 
 # ----------------------------
@@ -57,6 +57,11 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
             # Step 1: Generate the successor of the specific legal action
             # Since we are on the MAX level, the successor should be on the MIN level below
             next_state = copy_state(board)
+
+            # New handling
+            if is_meaningless_cascade(board, my_color, action):
+                continue
+
             apply_action(next_state, my_color, action)
 
             # Step 2: Perform minimax on this new successor
@@ -91,6 +96,10 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
 
         for action in legal_actions:
             next_state = copy_state(board)
+
+            if is_meaningless_cascade(board, my_color, action):
+                continue
+
             apply_action(next_state, opponent, action)
 
             score, _ = minimax(
@@ -141,3 +150,24 @@ def is_terminal(board: dict[Coord, CellState], total_turn_count: int, seen_state
             return True
     
     return False
+
+def is_meaningless_cascade (new_copied_state: dict[Coord, CellState], my_color: PlayerColor, action_to_be_applied: Action) -> bool:
+    player_stacks = [(c, s) for c, s in new_copied_state.items() if s.color == my_color]
+    opponent_stacks = [(c, s) for c, s in new_copied_state.items() if s.color == my_color.opponent]
+    # If it's other actions
+    if not isinstance(action_to_be_applied, CascadeAction):
+        return False
+    
+    # Check whether the new cascade action is meaningful
+    attacker_coord = action_to_be_applied.coord
+    attacker_state = CellState(my_color, new_copied_state[attacker_coord].height)
+    attacking_direction = action_to_be_applied.direction
+
+    is_meaningful = meaningful_cascade(attacker_coord, attacker_state, opponent_stacks, attacking_direction)
+
+    if is_meaningful:
+        #print("DEBUG: Here--meaningful wrong\n")
+        return False
+    
+    return True
+    

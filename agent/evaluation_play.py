@@ -97,6 +97,21 @@ def get_f2_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks:
         total_height_opponent += state_opponent.height
     
     return total_height_player - total_height_opponent
+# Feature 2_new: Difference in the greatest stack height on the board
+def get_f2_score_new (opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> float:
+    # Get the greatest height of stacks for our player
+    greatest_height_player = 0.0
+    for _, state_player in player_stacks:
+        if state_player.height > greatest_height_player:
+            greatest_height_player = state_player.height
+
+    # Get the greatest height of stacks for the opponent
+    greatest_height_opponent = 0.0
+    for _, state_opponent in opponent_stacks:
+        if state_opponent.height > greatest_height_opponent:
+            greatest_height_opponent = state_opponent.height
+    
+    return greatest_height_player - greatest_height_opponent
 
 # Feature 3: Difference in the total legal actions that could be considered for the current board
 # This might be expensive
@@ -140,7 +155,6 @@ def get_f4_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks:
 def get_f5_score (board: dict[Coord, CellState], opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> float:
     opponent_cascade = []
     player_cascade = []
-
 
     for coord_opponent, state_opponent in opponent_stacks:
         for coord_player, state_player in player_stacks:
@@ -195,7 +209,7 @@ def get_f7_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks:
 def evaluate_new (
     board: dict[Coord, CellState],
     color: PlayerColor,
-    total_turn_count: int
+    total_turn_count: int,
 ) -> float:
     """
     Bigger score = better board for this player.
@@ -210,11 +224,11 @@ def evaluate_new (
         return -1000000.0
 
     # The original weights
-    f1_weight = 20.0
+    f1_weight = 15.0
     f2_weight = 5.0
     f3_weight = 0.5
-    f4_weight = 15.0
-    f5_weight = 10.0
+    f4_weight = 5.0
+    f5_weight = 5.0
     f6_weight = 1.0
     f7_weight = 2.0
 
@@ -246,13 +260,17 @@ def evaluate_new (
     if BoardState.PLAYER_SCARCITY in state:
         f1_weight += 0.3 * 20
         f2_weight += 0.2 * 1
+    elif BoardState.OPPONENT_FEW_REMAIN in state:
+        f1_weight -= 0.7 * 15
+        f6_weight += 10.0
+    
     if BoardState.EDGE_CORNER_PRESSURE in state:
             f5_weight += 3.0
             f7_weight += 0.2 * 2
 
     # Get the scores for eac feature
     feature1_stack_num_diff = get_f1_score(opponent_stacks, player_stacks)
-    feature2_stack_height_diff = get_f2_score(opponent_stacks,player_stacks)
+    feature2_stack_height_diff = get_f2_score_new(opponent_stacks,player_stacks)
     feature3_legal_action_diff = get_f3_score(board, color, total_turn_count)
     feature4_eat_diff = get_f4_score(opponent_stacks, player_stacks)
     feature5_cascade_diff = get_f5_score(board, opponent_stacks, player_stacks)

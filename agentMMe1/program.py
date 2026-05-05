@@ -11,7 +11,7 @@ from .search import choose_action
 from .types import SeenStates
 from .helper import encode_state, record_state
 
-
+verbose: bool = False
 DEPTH_SEARCH = 3
 
 class Agent:
@@ -33,9 +33,11 @@ class Agent:
         self._total_turn_count = 0
         match color:
             case PlayerColor.RED:
-                print("Testing: I am playing as RED (first player)")
+                if verbose:
+                    print("Testing: I am playing as RED (first player)")
             case PlayerColor.BLUE:
-                print("Testing: I am playing as BLUE")
+                if verbose:
+                    print("Testing: I am playing as BLUE")
 
         # A dictionary to keep track of all seen states
         self._seen_states: SeenStates = {}
@@ -62,12 +64,14 @@ class Agent:
             # Step 2: Choose the best coordinate to place our stack
             match self._color:
                 case PlayerColor.RED:
-                    print("Testing: RED is playing a PLACE action")
+                    if verbose:
+                        print("Testing: RED is playing a PLACE action")
                     
                     best_placing_coord = choose_coord_placement_phase(self._board, legal_actions, self._color, self._turn_count)
                     return PlaceAction(best_placing_coord)
                 case PlayerColor.BLUE:
-                    print("Testing: BLUE is playing a PLACE action")
+                    if verbose:
+                        print("Testing: BLUE is playing a PLACE action")
 
                     best_placing_coord = choose_coord_placement_phase(self._board, legal_actions, self._color, self._turn_count)
                     return PlaceAction(best_placing_coord)
@@ -75,10 +79,12 @@ class Agent:
         # During play phase
         match self._color:
             case PlayerColor.RED:
-                print("Testing: RED is playing a MOVE action")
+                if verbose:
+                    print("Testing: RED is playing a MOVE action")
                 return choose_action(self._board, self._color, DEPTH_SEARCH, self._total_turn_count, SeenStates)
             case PlayerColor.BLUE:
-                print("Testing: BLUE is playing a MOVE action")
+                if verbose:
+                    print("Testing: BLUE is playing a MOVE action")
                 return choose_action(self._board, self._color, DEPTH_SEARCH, self._total_turn_count, SeenStates)
             
     def update(self, color: PlayerColor, action: Action, **referee: dict):
