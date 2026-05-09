@@ -1,7 +1,7 @@
 from enum import Enum
 
 from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N
-from .helper import get_Manhattan_distance, get_same_direction, successful_cascade, is_adjacent
+from .helper import get_Manhattan_distance, get_same_direction, successful_cascade, is_adjacent, get_distance_to_edge_shortest
 
 
 class BoardState(Enum):
@@ -9,6 +9,7 @@ class BoardState(Enum):
     EDGE_CORNER_PRESSURE = 2
     PLAYER_SCARCITY = 3
     OPPONENT_SCATTERED = 4
+    OPPONENT_FEW_REMAIN = 5
 
 # ----------------------------
 # Helpers to read board patterns
@@ -29,7 +30,7 @@ def is_scatter (coord_outer: Coord, coord_inner: Coord) -> bool:
     if coord_outer == coord_inner:
         return False
 
-    return get_Manhattan_distance(coord_outer, coord_inner) >= 4
+    return get_Manhattan_distance(coord_outer, coord_inner) >= 6
 
 
 def no_player_between (
@@ -110,13 +111,17 @@ def detect_board_state (
             coord_b, _ = opponent_stacks[j]
             if is_scatter(coord_a, coord_b):
                 scatter_pair_count += 1
-                if scatter_pair_count >= 2:
+                if scatter_pair_count >= 3:
                     break
-        if scatter_pair_count >= 2:
+        if scatter_pair_count >= 3:
             break
 
-    if scatter_pair_count >= 2 and dense_pair_count == 0:
+    if scatter_pair_count >= 3 and dense_pair_count == 0:
         detected_state.append(BoardState.OPPONENT_SCATTERED)
+
+    # C: We the opponent is behind in stack count--the board is favrible for us already
+    if len(player_stacks) - len(opponent_stacks) >= 2:
+        detected_state.append(BoardState.OPPONENT_FEW_REMAIN)
 
     return detected_state
 
@@ -164,3 +169,13 @@ def get_threat (
             return 0.3 - state_impact_same_direction
 
     return 1.0
+
+# Find the total distance between each stack and the nearest edge
+def get_total_dist_to_edge (stacks: list[tuple[Coord, CellState]]) -> float:
+    total_nearest_edge_distance = 0
+    for coord, _ in stacks:
+        dist_edge_nearest = get_distance_to_edge_shortest(coord)
+        total_nearest_edge_distance += dist_edge_nearest
+    
+    return total_nearest_edge_distance
+        

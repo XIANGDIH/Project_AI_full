@@ -128,7 +128,7 @@ def apply_action(
     board: dict[Coord, CellState],
     color: PlayerColor,
     action: Action,
-    verbose: bool = True,
+    verbose: bool = False,
 ) -> None:
     match action:
         case PlaceAction(coord):

@@ -33,6 +33,9 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
     """
 
     current_color = my_color if maximizing else my_color.opponent
+    # Don't wanna change the counter and seen state container in the game
+    total_turn_count_mm = total_turn_count
+    seen_states_mm = seen_states.copy()
 
     # Base case
     if depth == 0 or is_terminal(board, total_turn_count, seen_states, current_color):
@@ -54,15 +57,18 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
         best_score = float("-inf")
 
         for action in legal_actions:
-            # Step 1: Generate the successor of the specific legal action
-            # Since we are on the MAX level, the successor should be on the MIN level below
-            next_state = copy_state(board)
-
-            # New handling
+            # Dealing with the meaningless case corresponding to feature 1 in our evaluation function
+            # Check whether the current action is meaningful
             if is_meaningless_cascade(board, my_color, action):
                 continue
 
+            # Step 1: Generate the successor of the specific legal action
+            # Since we are on the MAX level, the successor should be on the MIN level below
+            next_state = copy_state(board)
             apply_action(next_state, my_color, action)
+
+            # Add this new successor to the seen state dictionary--not sure whether record it here
+            record_state(seen_states_mm, next_state, my_color)
 
             # Step 2: Perform minimax on this new successor
             score, _ = minimax(
@@ -72,8 +78,8 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
                 beta,
                 False,
                 my_color,
-                total_turn_count,
-                seen_states
+                total_turn_count_mm + 1,
+                seen_states_mm
             )
 
             # Step 3: Check whether the new evaluation value gives a better score, update it if it gives
@@ -92,15 +98,18 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
 
     else:
         best_score = float("inf")
-        opponent = my_color.opponent
+        opponent_color = my_color.opponent
 
         for action in legal_actions:
-            next_state = copy_state(board)
+            
 
-            if is_meaningless_cascade(board, my_color, action):
+            if is_meaningless_cascade(board, opponent_color, action):
                 continue
 
-            apply_action(next_state, opponent, action)
+            next_state = copy_state(board)
+            apply_action(next_state, opponent_color, action)
+
+            record_state(seen_states_mm, next_state, my_color)
 
             score, _ = minimax(
                 next_state,
@@ -109,7 +118,7 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
                 beta,
                 True,
                 my_color,
-                total_turn_count,
+                total_turn_count_mm + 1,
                 seen_states
             )
 
