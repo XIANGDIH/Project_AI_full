@@ -13,7 +13,14 @@ from .helper import encode_state, record_state, meaningful_cascade
 # Implementation of MINIMAX
 # ----------------------------
 
-def choose_action(board: dict[Coord, CellState], my_color: PlayerColor, depth: int, total_turn_count: int, seen_states: SeenStates) -> Action:
+def choose_action(
+    board: dict[Coord, CellState],
+    my_color: PlayerColor,
+    depth: int,
+    total_turn_count: int,
+    seen_states: SeenStates,
+    weights: dict[str, float]
+) -> Action:
     score, best_action = minimax(
         board=board,
         depth=depth,
@@ -22,11 +29,22 @@ def choose_action(board: dict[Coord, CellState], my_color: PlayerColor, depth: i
         maximizing=True,
         my_color=my_color,
         total_turn_count=total_turn_count,
-        seen_states=seen_states
+        seen_states=seen_states,
+        weights=weights
     )
     return best_action
 
-def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float, maximizing: bool, my_color: PlayerColor, total_turn_count: int, seen_states: SeenStates) -> tuple[int, Action]:
+def minimax(
+    board: dict[Coord, CellState],
+    depth: int,
+    alpha: float,
+    beta: float,
+    maximizing: bool,
+    my_color: PlayerColor,
+    total_turn_count: int,
+    seen_states: SeenStates,
+    weights: dict[str, float]
+) -> tuple[int, Action]:
     """
     Using DFS to implement the MINIMAX strategy with alpha-beta pruning as cut-offs
     Returns (score, best_action)
@@ -36,14 +54,14 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
 
     # Base case
     if depth == 0 or is_terminal(board, total_turn_count, seen_states, current_color):
-        return evaluate_new(board, my_color, total_turn_count), None
+        return evaluate_new(board, my_color, total_turn_count, weights), None
 
     # Decide whose turn is it and get all legal actions (a list of actions) for this turn
     legal_actions = get_legal_actions(board, current_color, total_turn_count)
 
     # Defensive check
     if not legal_actions:
-        return evaluate_new(board, my_color, total_turn_count), None
+        return evaluate_new(board, my_color, total_turn_count, weights), None
 
     # The action we are going to return for this tree
     best_action = None
@@ -73,7 +91,8 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
                 False,
                 my_color,
                 total_turn_count,
-                seen_states
+                seen_states,
+                weights
             )
 
             # Step 3: Check whether the new evaluation value gives a better score, update it if it gives
@@ -110,7 +129,8 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
                 True,
                 my_color,
                 total_turn_count,
-                seen_states
+                seen_states,
+                weights
             )
 
             if score < best_score:

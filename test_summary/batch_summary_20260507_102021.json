@@ -1,0 +1,21 @@
+{
+  "agent": "agent",
+  "games_per_side": 100,
+  "total_games": 200,
+  "weights_a": "20.3,5,0.5,15.6,10.6,1.1,2",
+  "weights_b": "20,5,0.5,15,10,1,2",
+  "red_wins": 0,
+  "blue_wins": 177,
+  "draws": 23,
+  "unknown_results": 0,
+  "failed_runs": 0,
+  "red_win_rate": 0.0,
+  "blue_win_rate": 0.885,
+  "draw_rate": 0.115,
+  "a_wins": 83,
+  "b_wins": 94,
+  "a_win_rate": 0.415,
+  "b_win_rate": 0.47,
+  "a_relative_strength": 0.4725,
+  "average_total_turns": 28.08
+}
