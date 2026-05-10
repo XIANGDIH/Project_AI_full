@@ -4,7 +4,6 @@
 from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N, Action
 from .rules import get_legal_actions
 from .evaluation_play import evaluate
-from .rules import apply_action
 from .types import SeenStates
 from .helper import encode_state, record_state
 from .helper_MCTS import MCTSNode, copy_state, select, expand, is_terminal, playout, backpropagate

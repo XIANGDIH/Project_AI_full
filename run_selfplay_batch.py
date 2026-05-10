@@ -65,7 +65,8 @@ def parse_total_turns(output_text: str) -> int | None:
 
 def run_one_game(
     project_root: Path,
-    agent_name: str,
+    red_agent: str,
+    blue_agent: str,
     red_weights: str,
     blue_weights: str,
     verbose_level: str,
@@ -82,8 +83,8 @@ def run_one_game(
         "referee",
         "-v",
         verbose_level,
-        agent_name,
-        agent_name,
+        red_agent,
+        blue_agent,
     ]
 
     result = subprocess.run(
@@ -107,6 +108,8 @@ def run_one_game(
         "return_code": result.returncode,
         "winner": winner,
         "total_turns": total_turns,
+        "red_agent": red_agent,
+        "blue_agent": blue_agent,
         "red_weights": red_weights,
         "blue_weights": blue_weights,
         "raw_output_file": str(raw_output_path),
@@ -115,7 +118,8 @@ def run_one_game(
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--agent", default="agentMCTS", help="Agent module name for both sides.")
+    parser.add_argument("--agent-a", default="agentMCTS", help="Agent module name for A.")
+    parser.add_argument("--agent-b", default="agentMMe1", help="Agent module name for B.")
     parser.add_argument("--games-per-side", type=int, default=10, help="Games for each side assignment.")
     parser.add_argument("--weights-a", required=True, help="Weights A: f1,f2,f3,f4,f5,f6,f7")
     parser.add_argument("--weights-b", required=True, help="Weights B: f1,f2,f3,f4,f5,f6,f7")
@@ -124,7 +128,9 @@ def main() -> None:
 
     project_root = Path(__file__).resolve().parent
     logs_dir = project_root / "logs"
+    summary_dir = project_root / "summary"
     logs_dir.mkdir(parents=True, exist_ok=True)
+    summary_dir.mkdir(parents=True, exist_ok=True)
 
     game_details: list[dict] = []
     game_index = 1
@@ -132,7 +138,8 @@ def main() -> None:
     for _ in range(args.games_per_side):
         game_result = run_one_game(
             project_root,
-            args.agent,
+            args.agent_a,
+            args.agent_b,
             args.weights_a,
             args.weights_b,
             args.verbose,
@@ -146,7 +153,8 @@ def main() -> None:
     for _ in range(args.games_per_side):
         game_result = run_one_game(
             project_root,
-            args.agent,
+            args.agent_b,
+            args.agent_a,
             args.weights_b,
             args.weights_a,
             args.verbose,
@@ -217,7 +225,8 @@ def main() -> None:
         average_total_turns = None
 
     summary = {
-        "agent": args.agent,
+        "agent_a": args.agent_a,
+        "agent_b": args.agent_b,
         "games_per_side": args.games_per_side,
         "total_games": total_games,
         "weights_a": args.weights_a,
@@ -239,8 +248,8 @@ def main() -> None:
     }
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    summary_path = logs_dir / f"batch_summary_{timestamp}.json"
-    detail_path = logs_dir / f"batch_detail_{timestamp}.json"
+    summary_path = summary_dir / f"batch_summary_{timestamp}.json"
+    detail_path = summary_dir / f"batch_detail_{timestamp}.json"
 
     with summary_path.open("w", encoding="utf-8") as file:
         json.dump(summary, file, indent=2, ensure_ascii=False)
@@ -257,4 +266,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
