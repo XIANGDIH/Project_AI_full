@@ -1,12 +1,75 @@
 # This file contains the logic about finding "EVAL" for the play phase.
 # We reuse old heuristic ideas, but adapt them for two-player evaluation.
 
+import os
 
 from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N
 
 from .helper import get_same_direction, successful_cascade, is_adjacent, get_opposite_direction, is_in_same_line
 from .helper_play import BoardState, detect_board_state, get_threat, get_total_dist_to_edge
 from .rules import get_legal_actions
+
+
+DEFAULT_WEIGHTS = {
+    "f1_weight": 15.0,
+    "f2_weight": 5.0,
+    "f3_weight": 0.5,
+    "f4_weight": 5.0,
+    "f5_weight": 5.0,
+    "f6_weight": 1.0,
+    "f7_weight": 2.0,
+}
+
+
+def _parse_weights_text(weights_text: str) -> dict[str, float] | None:
+    parts_raw = weights_text.split(",")
+    parts: list[str] = []
+
+    for part in parts_raw:
+        clean_part = part.strip()
+        if clean_part != "":
+            parts.append(clean_part)
+
+    if len(parts) != 7:
+        return None
+
+    values: list[float] = []
+    try:
+        for part in parts:
+            values.append(float(part))
+    except ValueError:
+        return None
+
+    return {
+        "f1_weight": values[0],
+        "f2_weight": values[1],
+        "f3_weight": values[2],
+        "f4_weight": values[3],
+        "f5_weight": values[4],
+        "f6_weight": values[5],
+        "f7_weight": values[6],
+    }
+
+
+def get_weights_for_color(color: PlayerColor) -> dict[str, float]:
+    if color == PlayerColor.RED:
+        key = "AGENTMCTS_WEIGHTS_RED"
+    else:
+        key = "AGENTMCTS_WEIGHTS_BLUE"
+
+    text = os.getenv(key)
+    if text is not None:
+        parsed = _parse_weights_text(text)
+        if parsed is not None:
+            return parsed
+
+    text_shared = os.getenv("AGENTMCTS_WEIGHTS")
+    if text_shared is not None:
+        parsed = _parse_weights_text(text_shared)
+        if parsed is not None:
+            return parsed
+
+    return dict(DEFAULT_WEIGHTS)
 
 
 # ----------------------------
@@ -205,11 +268,83 @@ def get_f7_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks:
     opponent_average = opponent_total_dist / len(opponent_stacks)
 
     return player_average - opponent_average
+
+
+def get_feature_breakdown(
+    board: dict[Coord, CellState],
+    color: PlayerColor,
+    total_turn_count: int,
+    weights: dict[str, float] | None = None,
+) -> dict[str, float]:
+    player_stacks: list[tuple[Coord, CellState]] = []
+    opponent_stacks: list[tuple[Coord, CellState]] = []
+
+    for coord, state in board.items():
+        if state.color == color:
+            player_stacks.append((coord, state))
+        else:
+            opponent_stacks.append((coord, state))
+
+    if weights is None:
+        weights = get_weights_for_color(color)
+
+    if len(opponent_stacks) == 0:
+        return {
+            "f1_stack_num_diff": 0.0,
+            "f2_stack_height_diff": 0.0,
+            "f3_legal_action_diff": 0.0,
+            "f4_eat_diff": 0.0,
+            "f5_cascade_diff": 0.0,
+            "f6_same_line_diff": 0.0,
+            "f7_average_edge_dist_diff": 0.0,
+            "weighted_total": 1000000.0,
+        }
+    if len(player_stacks) == 0:
+        return {
+            "f1_stack_num_diff": 0.0,
+            "f2_stack_height_diff": 0.0,
+            "f3_legal_action_diff": 0.0,
+            "f4_eat_diff": 0.0,
+            "f5_cascade_diff": 0.0,
+            "f6_same_line_diff": 0.0,
+            "f7_average_edge_dist_diff": 0.0,
+            "weighted_total": -1000000.0,
+        }
+
+    f1 = get_f1_score(opponent_stacks, player_stacks)
+    f2 = get_f2_score_new(opponent_stacks, player_stacks)
+    f3 = get_f3_score(board, color, total_turn_count)
+    f4 = get_f4_score(opponent_stacks, player_stacks)
+    f5 = get_f5_score(board, opponent_stacks, player_stacks)
+    f6 = get_f6_score(opponent_stacks, player_stacks)
+    f7 = get_f7_score(opponent_stacks, player_stacks)
+
+    weighted_total = (
+        + weights["f1_weight"] * f1
+        + weights["f2_weight"] * f2
+        + weights["f3_weight"] * f3
+        + weights["f4_weight"] * f4
+        + weights["f5_weight"] * f5
+        + weights["f6_weight"] * f6
+        + weights["f7_weight"] * f7
+    )
+
+    return {
+        "f1_stack_num_diff": f1,
+        "f2_stack_height_diff": f2,
+        "f3_legal_action_diff": f3,
+        "f4_eat_diff": f4,
+        "f5_cascade_diff": f5,
+        "f6_same_line_diff": f6,
+        "f7_average_edge_dist_diff": f7,
+        "weighted_total": weighted_total,
+    }
     
 def evaluate_new (
     board: dict[Coord, CellState],
     color: PlayerColor,
     total_turn_count: int,
+    weights: dict[str, float] | None = None,
 ) -> float:
     """
     Bigger score = better board for this player.
@@ -223,14 +358,16 @@ def evaluate_new (
     if not player_stacks:
         return -1000000.0
 
-    # The original weights
-    f1_weight = 15.0
-    f2_weight = 5.0
-    f3_weight = 0.5
-    f4_weight = 5.0
-    f5_weight = 5.0
-    f6_weight = 1.0
-    f7_weight = 2.0
+    if weights is None:
+        weights = get_weights_for_color(color)
+
+    f1_weight = weights["f1_weight"]
+    f2_weight = weights["f2_weight"]
+    f3_weight = weights["f3_weight"]
+    f4_weight = weights["f4_weight"]
+    f5_weight = weights["f5_weight"]
+    f6_weight = weights["f6_weight"]
+    f7_weight = weights["f7_weight"]
 
     # Adjust weights based on current board pattern--need to be updated
     state = detect_board_state(opponent_stacks, player_stacks)

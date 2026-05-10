@@ -122,7 +122,13 @@ def select(node: MCTSNode, total_turn_count_sm: int, seen_states_sm: SeenStates)
 
 
 # {Expansion}
-def expand(node: MCTSNode, player_to_move_color: PlayerColor, total_turn_count_sm: int, seen_states_sm: SeenStates) -> MCTSNode:
+def expand(
+    node: MCTSNode,
+    player_to_move_color: PlayerColor,
+    total_turn_count_sm: int,
+    seen_states_sm: SeenStates,
+    weights: dict[str, float],
+) -> MCTSNode:
     """
     Expand a child node of the given leaf (parent) node by one untried action from this given leaf (parent) node.
     """
@@ -149,7 +155,7 @@ def expand(node: MCTSNode, player_to_move_color: PlayerColor, total_turn_count_s
         apply_action(new_board, player_to_move_color, action)
 
         # ss2: Evaluate the new board state after applying this action
-        evaluations[action] = evaluate_new(new_board, player_to_move_color, total_turn_count_sm)
+        evaluations[action] = evaluate_new(new_board, player_to_move_color, total_turn_count_sm, weights)
 
     # ss3: Sort all the actions by their evaluation scores
     sorted_evaluations = dict(sorted(evaluations.items(), key=lambda item: item[1], reverse=True))
@@ -176,7 +182,15 @@ def expand(node: MCTSNode, player_to_move_color: PlayerColor, total_turn_count_s
 
 
 # {Simulation}
-def playout(board: dict[Coord, CellState], my_color: PlayerColor, player_to_move_color: PlayerColor, total_turn_count_sm: int, seen_states_sm: SeenStates, rollout_depth=30) -> float:
+def playout(
+    board: dict[Coord, CellState],
+    my_color: PlayerColor,
+    player_to_move_color: PlayerColor,
+    total_turn_count_sm: int,
+    seen_states_sm: SeenStates,
+    weights: dict[str, float],
+    rollout_depth=30
+) -> float:
     """
     Simulate a game from the current state.
     Return reward from my_color's perspective.
@@ -219,7 +233,7 @@ def playout(board: dict[Coord, CellState], my_color: PlayerColor, player_to_move
             apply_action(new_board, current_player_color, action)
 
             # ss2: Evaluate the new board state after applying this action
-            evaluations[action] = evaluate(new_board, current_player_color)
+            evaluations[action] = evaluate_new(new_board, current_player_color, current_total_turn_count, weights)
 
         # ss3: Sort all the actions by their evaluation scores
         sorted_evaluations = dict(sorted(evaluations.items(), key=lambda item: item[1], reverse=True))

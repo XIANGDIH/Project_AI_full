@@ -14,7 +14,14 @@ from .helper_MCTS import MCTSNode, copy_state, select, expand, is_terminal, play
 # Implementation of MCTS
 # ----------------------------
 
-def mcts_choose_action(board: dict[Coord, CellState], player_to_move_color: PlayerColor, total_turn_count: int, seen_states: SeenStates, iterations=500) -> Action:
+def mcts_choose_action(
+    board: dict[Coord, CellState],
+    player_to_move_color: PlayerColor,
+    total_turn_count: int,
+    seen_states: SeenStates,
+    weights: dict[str, float],
+    iterations=500
+) -> Action:
     # The count we take in would be the total count of the game so far (me + opponent)
     # We also take in the dictionary of all board states have been witnessed (with the number of times it has been witnessed) in the game so far
 
@@ -52,12 +59,12 @@ def mcts_choose_action(board: dict[Coord, CellState], player_to_move_color: Play
 
             # The node now is the newly expanded child node of the previous parent node obtained by applying an intried legal function of the previous parent node
             if node.untried_actions:
-                node = expand(node, player_to_move_color, total_turn_count_sm, seen_states_sm)
+                node = expand(node, player_to_move_color, total_turn_count_sm, seen_states_sm, weights)
                 total_turn_count_sm += 1
                 record_state(seen_states_sm, node.state, node.player_to_move_color)
 
         # P3: Simulation
-        reward = playout(node.state, root.player_to_move_color, node.player_to_move_color, total_turn_count_sm, seen_states_sm)
+        reward = playout(node.state, root.player_to_move_color, node.player_to_move_color, total_turn_count_sm, seen_states_sm, weights)
 
         # P4: Backpropagation
         backpropagate(node, reward, node.player_to_move_color)
