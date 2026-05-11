@@ -119,7 +119,7 @@ def run_one_game(
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--agent-a", default="agentMCTS", help="Agent module name for A.")
-    parser.add_argument("--agent-b", default="agentMMe1", help="Agent module name for B.")
+    parser.add_argument("--agent-b", default="agent", help="Agent module name for B.")
     parser.add_argument("--games-per-side", type=int, default=10, help="Games for each side assignment.")
     parser.add_argument("--weights-a", required=True, help="Weights A: f1,f2,f3,f4,f5,f6,f7")
     parser.add_argument("--weights-b", required=True, help="Weights B: f1,f2,f3,f4,f5,f6,f7")
