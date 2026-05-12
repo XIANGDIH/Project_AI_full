@@ -44,7 +44,11 @@ def choose_action(board: dict[Coord, CellState], my_color: PlayerColor, depth: i
         root_depth=depth
     )
     if decision_trace_enabled():
-        print(f"DecisionTrace: {my_color} chooses {action_to_text(best_action)} with score {score}")
+        turn_number = total_turn_count + 1
+        print(
+            f"DecisionTrace: turn={turn_number} player={my_color} "
+            f"chooses {action_to_text(best_action)} with score {score}"
+        )
     return best_action
 
 def minimax(
@@ -115,8 +119,10 @@ def minimax(
             )
 
             if decision_trace_enabled() and depth == root_depth:
+                turn_number = total_turn_count_mm + 1
                 print(
-                    f"DecisionTrace: candidate {action_to_text(action)} -> score {score} "
+                    f"DecisionTrace: turn={turn_number} player={my_color} "
+                    f"candidate {action_to_text(action)} -> score {score} "
                     f"(alpha={alpha}, beta={beta})"
                 )
 
@@ -130,8 +136,10 @@ def minimax(
 
             if beta <= alpha:
                 if decision_trace_enabled() and depth == root_depth:
+                    turn_number = total_turn_count_mm + 1
                     print(
-                        f"DecisionTrace: prune at root after {action_to_text(action)} "
+                        f"DecisionTrace: turn={turn_number} player={my_color} "
+                        f"prune at root after {action_to_text(action)} "
                         f"(alpha={alpha}, beta={beta})"
                     )
                 break   # beta cut-off
