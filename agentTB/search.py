@@ -3,7 +3,7 @@
 
 import os
 
-from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N, Action, CascadeAction
+from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N, Action, CascadeAction, EatAction
 from .rules import get_legal_actions
 from .evaluation_play import evaluate, evaluate_new
 from .rules import apply_action
@@ -51,6 +51,40 @@ def choose_action(board: dict[Coord, CellState], my_color: PlayerColor, depth: i
         )
     return best_action
 
+
+def get_tie_break_score(
+    board: dict[Coord, CellState],
+    action: Action,
+    current_color: PlayerColor,
+    total_turn_count: int,
+    seen_states: SeenStates
+) -> float:
+    tie_break_score = 0.0
+
+    # Anti-cycle: if this move goes back to a repeated board for the same side,
+    # give it a small penalty.
+    next_state = copy_state(board)
+    apply_action(next_state, current_color, action)
+    encoded_next_state = encode_state(next_state)
+    if encoded_next_state in seen_states:
+        seen_count, seen_color = seen_states[encoded_next_state]
+        if seen_color == current_color:
+            tie_break_score -= 0.2 * seen_count
+
+    # Safe-eat bonus: only reward EAT when opponent has no immediate EAT reply.
+    if isinstance(action, EatAction):
+        opponent_color = current_color.opponent
+        opponent_actions = get_legal_actions(next_state, opponent_color, total_turn_count + 1)
+        opponent_has_eat = False
+        for opponent_action in opponent_actions:
+            if isinstance(opponent_action, EatAction):
+                opponent_has_eat = True
+                break
+        if not opponent_has_eat:
+            tie_break_score += 0.15
+
+    return tie_break_score
+
 def minimax(
     board: dict[Coord, CellState],
     depth: int,
@@ -90,6 +124,7 @@ def minimax(
     if maximizing:
         # Start with the worst 
         best_score = float("-inf")
+        best_tie_break_score = float("-inf")
 
         for action in legal_actions:
             # Dealing with the meaningless case corresponding to feature 1 in our evaluation function
@@ -120,16 +155,34 @@ def minimax(
 
             if decision_trace_enabled() and depth == root_depth:
                 turn_number = total_turn_count_mm + 1
+                tie_break_score = get_tie_break_score(
+                    board,
+                    action,
+                    my_color,
+                    total_turn_count_mm,
+                    seen_states_mm
+                )
                 print(
                     f"DecisionTrace: turn={turn_number} player={my_color} "
                     f"candidate {action_to_text(action)} -> score {score} "
-                    f"(alpha={alpha}, beta={beta})"
+                    f"tie={tie_break_score} (alpha={alpha}, beta={beta})"
                 )
 
             # Step 3: Check whether the new evaluation value gives a better score, update it if it gives
-            if score > best_score:
+            tie_break_score = get_tie_break_score(
+                board,
+                action,
+                my_color,
+                total_turn_count_mm,
+                seen_states_mm
+            )
+            if score > best_score + 1e-9:
                 best_score = score
                 best_action = action
+                best_tie_break_score = tie_break_score
+            elif abs(score - best_score) <= 1e-9 and tie_break_score > best_tie_break_score:
+                best_action = action
+                best_tie_break_score = tie_break_score
 
             # Step 4: Update the best score the current MAX level that could already be guaranteed
             alpha = max(alpha, best_score)
@@ -149,6 +202,7 @@ def minimax(
 
     else:
         best_score = float("inf")
+        best_tie_break_score = float("inf")
         opponent_color = my_color.opponent
 
         for action in legal_actions:
@@ -174,9 +228,20 @@ def minimax(
                 root_depth
             )
 
-            if score < best_score:
+            tie_break_score = get_tie_break_score(
+                board,
+                action,
+                opponent_color,
+                total_turn_count_mm,
+                seen_states_mm
+            )
+            if score < best_score - 1e-9:
                 best_score = score
                 best_action = action
+                best_tie_break_score = tie_break_score
+            elif abs(score - best_score) <= 1e-9 and tie_break_score < best_tie_break_score:
+                best_action = action
+                best_tie_break_score = tie_break_score
 
             # Update the best score the current MIN level that could already be guaranteed
             beta = min(beta, best_score)
