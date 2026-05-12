@@ -69,6 +69,7 @@ def run_one_game(
     blue_agent: str,
     red_weights: str,
     blue_weights: str,
+    decision_trace: str,
     verbose_level: str,
     logs_dir: Path,
     game_index: int,
@@ -76,6 +77,7 @@ def run_one_game(
     env = os.environ.copy()
     env["AGENTMCTS_WEIGHTS_RED"] = red_weights
     env["AGENTMCTS_WEIGHTS_BLUE"] = blue_weights
+    env["AGENT_DECISION_TRACE"] = decision_trace
 
     command = [
         sys.executable,
@@ -124,6 +126,7 @@ def main() -> None:
     parser.add_argument("--weights-a", required=True, help="Weights A: f1,f2,f3,f4,f5,f6,f7")
     parser.add_argument("--weights-b", required=True, help="Weights B: f1,f2,f3,f4,f5,f6,f7")
     parser.add_argument("--verbose", default="0", help="Referee verbose level.")
+    parser.add_argument("--decision-trace", default="off", choices=["on", "off"], help="Print minimax decision process.")
     args = parser.parse_args()
 
     project_root = Path(__file__).resolve().parent
@@ -142,6 +145,7 @@ def main() -> None:
             args.agent_b,
             args.weights_a,
             args.weights_b,
+            args.decision_trace,
             args.verbose,
             logs_dir,
             game_index,
@@ -157,6 +161,7 @@ def main() -> None:
             args.agent_a,
             args.weights_b,
             args.weights_a,
+            args.decision_trace,
             args.verbose,
             logs_dir,
             game_index,

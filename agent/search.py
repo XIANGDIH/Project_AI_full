@@ -1,6 +1,8 @@
 # This file contains the logic about the game play-strategy for the play phase.
 
 
+import os
+
 from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N, Action, CascadeAction
 from .rules import get_legal_actions
 from .evaluation_play import evaluate, evaluate_new
@@ -13,6 +15,22 @@ from .helper import encode_state, record_state, meaningful_cascade
 # Implementation of MINIMAX
 # ----------------------------
 
+def decision_trace_enabled() -> bool:
+    text = os.getenv("AGENT_DECISION_TRACE", "0")
+    return text.strip().lower() in ["1", "true", "yes", "on"]
+
+def action_to_text(action: Action | None) -> str:
+    if action is None:
+        return "None"
+
+    action_text = str(action)
+    action_text = action_text.replace("PlaceAction", "PLACE")
+    action_text = action_text.replace("MoveAction", "MOVE")
+    action_text = action_text.replace("EatAction", "EAT")
+    action_text = action_text.replace("CascadeAction", "CASCADE")
+    return action_text
+
+
 def choose_action(board: dict[Coord, CellState], my_color: PlayerColor, depth: int, total_turn_count: int, seen_states: SeenStates) -> Action:
     score, best_action = minimax(
         board=board,
@@ -22,11 +40,24 @@ def choose_action(board: dict[Coord, CellState], my_color: PlayerColor, depth: i
         maximizing=True,
         my_color=my_color,
         total_turn_count=total_turn_count,
-        seen_states=seen_states
+        seen_states=seen_states,
+        root_depth=depth
     )
+    if decision_trace_enabled():
+        print(f"DecisionTrace: {my_color} chooses {action_to_text(best_action)} with score {score}")
     return best_action
 
-def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float, maximizing: bool, my_color: PlayerColor, total_turn_count: int, seen_states: SeenStates) -> tuple[int, Action]:
+def minimax(
+    board: dict[Coord, CellState],
+    depth: int,
+    alpha: float,
+    beta: float,
+    maximizing: bool,
+    my_color: PlayerColor,
+    total_turn_count: int,
+    seen_states: SeenStates,
+    root_depth: int
+) -> tuple[int, Action]:
     """
     Using DFS to implement the MINIMAX strategy with alpha-beta pruning as cut-offs
     Returns (score, best_action)
@@ -79,8 +110,15 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
                 False,
                 my_color,
                 total_turn_count_mm + 1,
-                seen_states_mm
+                seen_states_mm,
+                root_depth
             )
+
+            if decision_trace_enabled() and depth == root_depth:
+                print(
+                    f"DecisionTrace: candidate {action_to_text(action)} -> score {score} "
+                    f"(alpha={alpha}, beta={beta})"
+                )
 
             # Step 3: Check whether the new evaluation value gives a better score, update it if it gives
             if score > best_score:
@@ -91,6 +129,11 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
             alpha = max(alpha, best_score)
 
             if beta <= alpha:
+                if decision_trace_enabled() and depth == root_depth:
+                    print(
+                        f"DecisionTrace: prune at root after {action_to_text(action)} "
+                        f"(alpha={alpha}, beta={beta})"
+                    )
                 break   # beta cut-off
 
         # Return the best score and the corresponding best action for this node
@@ -119,7 +162,8 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
                 True,
                 my_color,
                 total_turn_count_mm + 1,
-                seen_states
+                seen_states,
+                root_depth
             )
 
             if score < best_score:

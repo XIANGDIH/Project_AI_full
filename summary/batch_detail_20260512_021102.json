@@ -1,0 +1,26 @@
+[
+  {
+    "game_index": 1,
+    "return_code": 0,
+    "winner": "RED",
+    "total_turns": 51,
+    "red_agent": "agent",
+    "blue_agent": "agent",
+    "red_weights": "20,5,0.5,15,10,1,2",
+    "blue_weights": "20,5,0.5,15,10,1,2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0001.txt",
+    "side_setup": "A_as_RED_B_as_BLUE"
+  },
+  {
+    "game_index": 2,
+    "return_code": 0,
+    "winner": "DRAW",
+    "total_turns": 31,
+    "red_agent": "agent",
+    "blue_agent": "agent",
+    "red_weights": "20,5,0.5,15,10,1,2",
+    "blue_weights": "20,5,0.5,15,10,1,2",
+    "raw_output_file": "/workspaces/Project_AI_full/logs/batch_game_output_0002.txt",
+    "side_setup": "B_as_RED_A_as_BLUE"
+  }
+]
