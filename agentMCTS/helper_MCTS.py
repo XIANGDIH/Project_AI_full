@@ -4,9 +4,11 @@ from typing import Optional
 
 from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N, Action, CascadeAction
 from .rules import get_legal_actions, apply_action
-from .helper import encode_state, record_state, meaningful_cascade
+from .helper import copy_state, encode_state, record_state, get_all_distance_to_opponent
 from .types import SeenStates
 from .evaluation_play import evaluate, evaluate_new
+from .helper_play import BoardState, detect_board_state
+from .optimization import filter_meaningful_actions, order_actions
 
 C = math.sqrt(2)
 
@@ -19,7 +21,7 @@ def is_terminal(board: dict[Coord, CellState], total_turn_count: int, seen_state
         return True
     
     # Termination condition 2: The play phase has ran 300 turns
-    if total_turn_count + 1 - 4 >= 300:
+    if total_turn_count - 8 >= 300:
         return True
     
     # Termination condition 3: The same board position occurs three times
@@ -33,29 +35,6 @@ def is_terminal(board: dict[Coord, CellState], total_turn_count: int, seen_state
     
     return False
 
-def is_meaningless_cascade (new_copied_state: dict[Coord, CellState], my_color: PlayerColor, action_to_be_applied: Action) -> bool:
-    player_stacks = [(c, s) for c, s in new_copied_state.items() if s.color == my_color]
-    opponent_stacks = [(c, s) for c, s in new_copied_state.items() if s.color == my_color.opponent]
-    # If it's other actions
-    if not isinstance(action_to_be_applied, CascadeAction):
-        return False
-    
-    # Check whether the new cascade action is meaningful
-    attacker_coord = action_to_be_applied.coord
-    attacker_state = CellState(my_color, new_copied_state[attacker_coord].height)
-    attacking_direction = action_to_be_applied.direction
-
-    is_meaningful = meaningful_cascade(attacker_coord, attacker_state, opponent_stacks, attacking_direction)
-
-    if is_meaningful:
-        #print("DEBUG: Here--meaningful wrong\n")
-        return False
-    
-    return True
-
-def copy_state(state):
-    return state.copy()
-
 # Node
 class MCTSNode:
     def __init__(self, state, parent: Optional["MCTSNode"] = None, action=None, player_to_move_color=None):
@@ -67,13 +46,13 @@ class MCTSNode:
 
         self.children: list[MCTSNode] = []
 
-        self.untried_actions = []
+        self.untried_actions = None
 
         self.playout_num = 0
         self.reward_num = 0.0         # the number of wins from root player's perspective (our agent's perspective)
 
     def is_fully_expanded(self) -> bool:
-        return len(self.untried_actions) == 0
+        return self.untried_actions is not None and len(self.untried_actions) == 0
 
     def average_utility(self) -> float:
         if self.playout_num == 0:
@@ -101,7 +80,7 @@ def get_ucb_score(parent: MCTSNode, child: MCTSNode, exploration_constant=math.s
 
     return exploitation + exploration
 
-def select(node: MCTSNode, total_turn_count_sm: int, seen_states_sm: SeenStates) -> MCTSNode:
+def select(node: MCTSNode, total_turn_count_sm: int, seen_states_sm: SeenStates) -> tuple[MCTSNode, int]:
     """
     Start from the root, apply the selection policy to choose successor states until we reach a best_selected leaf node.
     """
@@ -115,14 +94,14 @@ def select(node: MCTSNode, total_turn_count_sm: int, seen_states_sm: SeenStates)
             node.children,
             key=lambda child: get_ucb_score(node, child)
         )
-        total_turn_count_sm += 1
+        total_turn_count_sm += 1    # Cannot be updated directly inside this func
         record_state(seen_states_sm, node.state, node.player_to_move_color)
 
-    return node
+    return node, total_turn_count_sm
 
 
 # {Expansion}
-def expand(node: MCTSNode, player_to_move_color: PlayerColor, total_turn_count_sm: int, seen_states_sm: SeenStates) -> MCTSNode:
+def expand(node: MCTSNode, total_turn_count_sm: int, seen_states_sm: SeenStates, root_board_state: list[BoardState], my_color: PlayerColor) -> MCTSNode:
     """
     Expand a child node of the given leaf (parent) node by one untried action from this given leaf (parent) node.
     """
@@ -131,30 +110,37 @@ def expand(node: MCTSNode, player_to_move_color: PlayerColor, total_turn_count_s
     if is_terminal(node.state, total_turn_count_sm, seen_states_sm, node.player_to_move_color):
         return node
 
-    # Step 1: Get one of the possible untried legal actions--future improvement: ordering--based on the evaluation score
+    # Step 1: Get one of the possible untried legal actions
     # Get all its legal actions if this is the first time the node being expanded
     if node.untried_actions is None:
         node.untried_actions = get_legal_actions(
-            node.board,
-            node.player_to_move,
+            node.state,
+            node.player_to_move_color,
             total_turn_count_sm
         )
 
-    evaluations = {}
-    for action in node.untried_actions:
-        if is_meaningless_cascade(node.state, player_to_move_color, action):
-            continue
-        # ss1: Apply the action
-        new_board = copy_state(node.state)
-        apply_action(new_board, player_to_move_color, action)
+    # Defensive Check: If there is no legal action of the current node 
+    if not node.untried_actions: 
+        return node
 
-        # ss2: Evaluate the new board state after applying this action
-        evaluations[action] = evaluate_new(new_board, player_to_move_color, total_turn_count_sm)
+    # Find the best action and apply it first
+    ordered_untried_actions = order_actions(
+        node.state,
+        node.player_to_move_color,
+        node.untried_actions,
+        total_turn_count_sm,
+        seen_states_sm,
+        root_board_state
+    )
 
-    # ss3: Sort all the actions by their evaluation scores
-    sorted_evaluations = dict(sorted(evaluations.items(), key=lambda item: item[1], reverse=True))
+    if node.player_to_move_color != my_color:
+        k = min(3, len(ordered_untried_actions))
+        action = random.choice(ordered_untried_actions[:k])
+    else:
+        action = ordered_untried_actions[0]
 
-    action = next(iter(sorted_evaluations))
+    # Remove this chosen action from the parent node
+    node.untried_actions.remove(action)
 
     # Step 2: Apply the action and generate a new successor (child) node
     next_state = copy_state(node.state)
@@ -176,7 +162,7 @@ def expand(node: MCTSNode, player_to_move_color: PlayerColor, total_turn_count_s
 
 
 # {Simulation}
-def playout(board: dict[Coord, CellState], my_color: PlayerColor, player_to_move_color: PlayerColor, total_turn_count_sm: int, seen_states_sm: SeenStates, rollout_depth=30) -> float:
+def playout(board: dict[Coord, CellState], my_color: PlayerColor, player_to_move_color: PlayerColor, total_turn_count_sm: int, seen_states_sm: SeenStates,  root_board_state: list[BoardState], rollout_depth=30) -> tuple[float, PlayerColor | None]:
     """
     Simulate a game from the current state.
     Return reward from my_color's perspective.
@@ -204,6 +190,7 @@ def playout(board: dict[Coord, CellState], my_color: PlayerColor, player_to_move
             current_player_color,
             current_total_turn_count
         )
+        legal_actions = filter_meaningful_actions(current_board, current_player_color, legal_actions, root_board_state)
 
         # Defensive check
         if not legal_actions:
@@ -212,19 +199,36 @@ def playout(board: dict[Coord, CellState], my_color: PlayerColor, player_to_move
         # Step 2: Choose the action with the highest evaluation score
         evaluations = {}
         for action in legal_actions:
-            if is_meaningless_cascade(current_board, current_player_color, action):
-                continue
             # ss1: Apply the action
             new_board = copy_state(current_board)
             apply_action(new_board, current_player_color, action)
 
-            # ss2: Evaluate the new board state after applying this action
-            evaluations[action] = evaluate(new_board, current_player_color)
+            # ss2: Evaluate the new board state after applying this action--Always with respect to our own agent player
+            player_stacks = [(c, s) for c, s in current_board.items() if s.color == my_color]
+            opponent_stacks = [(c, s) for c, s in current_board.items() if s.color == my_color.opponent]
+            #parent_board_state = detect_board_state(current_board, opponent_stacks, player_stacks)
+            #(new_board, my_color, current_total_turn_count, current_seen_state, root_board_state)
+            evaluations[action] = evaluate(new_board, my_color, current_total_turn_count)
 
-        # ss3: Sort all the actions by their evaluation scores
-        sorted_evaluations = dict(sorted(evaluations.items(), key=lambda item: item[1], reverse=True))
+        if evaluations:
+            ordered_evaluations_des = sorted(
+                evaluations.items(),
+                key=lambda item: item[1],
+                reverse=True
+            )
+            ordered_evaluations_asc = sorted(
+                evaluations.items(),
+                key=lambda item: item[1],
+                reverse=False
+            )
 
-        action = next(iter(sorted_evaluations))
+            if current_player_color != my_color:
+                k = min(3, len(ordered_evaluations_asc))
+                action = random.choice(ordered_evaluations_asc[:k])[0]
+            else:
+                action = ordered_evaluations_des[0][0]
+        else:
+            action = random.choice(legal_actions)
 
         # Step 3: Update
         # Update the board
@@ -241,7 +245,7 @@ def playout(board: dict[Coord, CellState], my_color: PlayerColor, player_to_move
     # Get the reward value of this playout at the end of the playout (we have terminate this playout)
     return get_score_for_playout_result(current_board, my_color, current_player_color, current_total_turn_count, current_seen_state)
 
-def get_score_for_playout_result(current_board: dict[Coord, CellState], my_color: PlayerColor, current_player_color: PlayerColor, current_total_turn_count: int, current_seen_states: SeenStates) -> float:
+def get_score_for_playout_result(current_board: dict[Coord, CellState], my_color: PlayerColor, current_player_color: PlayerColor, current_total_turn_count: int, current_seen_states: SeenStates) -> tuple[float, PlayerColor | None]:
     """
     Return reward from our agent's perspective.
     --This should be updated to be more efficient
@@ -249,6 +253,7 @@ def get_score_for_playout_result(current_board: dict[Coord, CellState], my_color
 
     my_score = 0
     enemy_score = 0
+    win_player_color = None
 
     for cell in current_board.values():
         if cell.color == my_color:
@@ -257,31 +262,37 @@ def get_score_for_playout_result(current_board: dict[Coord, CellState], my_color
             enemy_score += cell.height
 
     if is_terminal(current_board, current_total_turn_count, current_seen_states, current_player_color):
+        # In terms of "favorable": with respect to my agent player
         # Case 1: In the current stopping state, our agent has won--it has eliminated all the opponent's stacks or our agent has more tokens on the board
         if my_score > 0 and enemy_score == 0:
-            return 1.0
+            win_player_color = my_color
         elif my_score > enemy_score:
-            return 1.0
+            win_player_color = my_color
         # Case 2: A draw
         elif my_score == enemy_score:
-            return 0.5
+            win_player_color = None
         # Case 3: A lose
         else:
-            return 0.0
+            win_player_color = my_color.opponent
     else:
         # Case 4: The current board state is favorable, even if we haven't reached an terminal state of the game
         if my_score > enemy_score:
-            return 1.0
+            win_player_color = my_color
         # Case 5: The current board state is not favorable
         elif my_score < enemy_score:
-            return 0.0
+            win_player_color = my_color.opponent
         # Case 6: The current board state is intermediate, hard to tell good or not
         else:
-            return 0.5
+            win_player_color = None
+    
+    if win_player_color != None:
+        return (1.0, win_player_color)
+    else:
+        return (0.0, None)
 
 
 # {Backpropagation}
-def backpropagate(node: MCTSNode, reward: float, player_to_move_color: PlayerColor) -> None:
+def backpropagate(node: MCTSNode, reward: float, win_player_color: PlayerColor) -> None:
     """
     Update visits and rewards from the newly expanded and "evaluated" child node back to the root.
     """
@@ -290,12 +301,9 @@ def backpropagate(node: MCTSNode, reward: float, player_to_move_color: PlayerCol
     # Update the nodes in this path
     while node is not None:
         node.playout_num += 1
-        # For nodes representing the same agent to play next
-        if node.player_to_move_color == player_to_move_color:
+        # For nodes representing the winner agent to play next
+        if node.parent is not None and node.parent.player_to_move_color == win_player_color:
             node.reward_num += reward
-        # For nodes representing the opponent agent to play next
-        else:
-            node.reward_num += 1.0 - reward
 
         # Keep traversing
         node = node.parent

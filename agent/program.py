@@ -77,13 +77,15 @@ class Agent:
         # During play phase
         match self._color:
             case PlayerColor.RED:
-                if verbose:
-                    print("Testing: RED is playing a MOVE action")
-                return choose_action(self._board, self._color, DEPTH_SEARCH, self._total_turn_count, self._seen_states)
+                if True:
+                    action, score = choose_action(self._board, self._color, DEPTH_SEARCH, self._total_turn_count, self._seen_states)
+                    print(f"Testing: RED is playing a {action} action with score {score}\n")
+                return action
             case PlayerColor.BLUE:
-                if verbose:
-                    print("Testing: BLUE is playing a MOVE action")
-                return choose_action(self._board, self._color, DEPTH_SEARCH, self._total_turn_count, self._seen_states)
+                if True:
+                    action, score = choose_action(self._board, self._color, DEPTH_SEARCH, self._total_turn_count, self._seen_states)
+                    print(f"Testing: BLUE is playing a {action} action with score {score}\n")
+                return action
             
     def update(self, color: PlayerColor, action: Action, **referee: dict):
         """

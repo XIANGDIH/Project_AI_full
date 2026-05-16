@@ -10,6 +10,9 @@ from .types import SeenStates
 
 
 # {Basic}
+def copy_state(state):
+    return state.copy()
+
 def get_Manhattan_distance (coord_a: Coord, coord_b: Coord) -> float:
     return abs(coord_b.r - coord_a.r) + abs(coord_b.c - coord_a.c)
 
@@ -35,6 +38,13 @@ def is_on_edge (coord: Coord) -> bool:
         coord.c == 0 or coord.c == BOARD_N - 1
     )
 
+def get_total_height (stacks: list[tuple[Coord, CellState]]) -> int:
+    total_height = 0
+    for coord, state in stacks:
+        total_height += state.height
+    
+    return total_height
+
 def get_distance_to_edge_shortest (coord: Coord) -> float:
     dist_top_edge = coord.r - 0
     dist_bottom_edge = 7 - coord.r
@@ -47,6 +57,35 @@ def get_distance_to_centre (coord: Coord) -> float:
     centre_r = 3.5
     centre_c = 3.5
     return abs(coord.r - centre_r) + abs(coord.c - centre_c)
+
+def get_all_distance_to_opponent (opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> list[float]:
+    shortest_dists_stacks = []
+
+    for coord_player, state_player in player_stacks:
+        shortest_dist = float("inf")
+
+        for coord_opponent, state_opponent in opponent_stacks:
+            if state_player.height >= state_opponent.height:
+                distance = get_Manhattan_distance(coord_player, coord_opponent)
+                shortest_dist = min(shortest_dist, distance)
+
+        shortest_dists_stacks.append(shortest_dist)
+
+    return shortest_dists_stacks
+
+def get_all_distance_to_opponent_general(opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> list[float]:
+    shortest_dists_stacks = []
+
+    for coord_player, state_player in player_stacks:
+        shortest_dist = float("inf")
+
+        for coord_opponent, state_opponent in opponent_stacks:
+                distance = get_Manhattan_distance(coord_player, coord_opponent)
+                shortest_dist = min(shortest_dist, distance)
+
+        shortest_dists_stacks.append(shortest_dist)
+
+    return shortest_dists_stacks
 
 def get_closest_to_centre (coords: list[Coord]) -> Coord | None:
     closest_coordinate = None
@@ -212,7 +251,6 @@ def meaningful_cascade (coord_attacker: Coord, state_attacker: CellState, stacks
     
     for coord_victim, _ in stacks_victim:
         if is_in_direction_path(coord_attacker, coord_victim, direction):
-            #print("DEBUG: Here\n")
             return True
     
     return False

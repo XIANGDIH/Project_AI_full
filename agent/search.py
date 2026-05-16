@@ -3,50 +3,69 @@
 
 from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N, Action, CascadeAction
 from .rules import get_legal_actions
-from .evaluation_play import evaluate, evaluate_new
+from .evaluation_play import evaluate, evaluate_new, get_f8_score
 from .rules import apply_action
 from .types import SeenStates
-from .helper import encode_state, record_state, meaningful_cascade
+from .helper import encode_state, record_state, copy_state
+from .helper_play import BoardState, detect_board_state
+from .optimization import is_meaningless_cascade, order_actions
 
 
 # ----------------------------
 # Implementation of MINIMAX
 # ----------------------------
 
-def choose_action(board: dict[Coord, CellState], my_color: PlayerColor, depth: int, total_turn_count: int, seen_states: SeenStates) -> Action:
-    score, best_action = minimax(
-        board=board,
-        depth=depth,
-        alpha=float("-inf"),
-        beta=float("inf"),
-        maximizing=True,
-        my_color=my_color,
-        total_turn_count=total_turn_count,
-        seen_states=seen_states
-    )
-    return best_action
+def choose_action(board, my_color, max_depth, total_turn_count, seen_states):
+    best_action = None
 
-def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float, maximizing: bool, my_color: PlayerColor, total_turn_count: int, seen_states: SeenStates) -> tuple[int, Action]:
+    player_stacks = [(c, s) for c, s in board.items() if s.color == my_color]
+    opponent_stacks = [(c, s) for c, s in board.items() if s.color == my_color.opponent]
+    root_board_state = detect_board_state(board, opponent_stacks, player_stacks)
+
+    for depth in range(1, max_depth + 1):
+        score, action = minimax(
+            board=board,
+            depth=depth,
+            alpha=float("-inf"),
+            beta=float("inf"),
+            maximizing=True,
+            my_color=my_color,
+            total_turn_count=total_turn_count,
+            seen_states=seen_states,
+            root_board_state=root_board_state
+        )
+
+        if action is not None:
+            best_action = action
+
+    if best_action is None:
+        legal_actions = get_legal_actions(board, my_color, total_turn_count)
+        return legal_actions[0]
+
+    return (best_action, score)
+
+def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float, maximizing: bool, my_color: PlayerColor, total_turn_count: int, seen_states: SeenStates, root_board_state: list[BoardState]) -> tuple[int, Action]:
     """
     Using DFS to implement the MINIMAX strategy with alpha-beta pruning as cut-offs
     Returns (score, best_action)
     """
 
+    # Get who is playing in this turn--the new board is obtained by which side's action
     current_color = my_color if maximizing else my_color.opponent
+
     # Don't wanna change the counter and seen state container in the game
     total_turn_count_mm = total_turn_count
-    seen_states_mm = seen_states.copy()
 
     # Base case
     if depth == 0 or is_terminal(board, total_turn_count, seen_states, current_color):
-        return evaluate_new(board, my_color, total_turn_count), None
+        return evaluate_new(board, my_color, total_turn_count, seen_states, root_board_state), None
 
     # Decide whose turn is it and get all legal actions (a list of actions) for this turn
     legal_actions = get_legal_actions(board, current_color, total_turn_count)
 
     # Defensive check
     if not legal_actions:
-        return evaluate_new(board, my_color, total_turn_count), None
+        return evaluate_new(board, my_color, total_turn_count, seen_states, root_board_state), None
 
     # The action we are going to return for this tree
     best_action = None
@@ -56,19 +75,25 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
         # Start with the worst 
         best_score = float("-inf")
 
-        for action in legal_actions:
+        for action in order_actions(board, my_color, legal_actions, total_turn_count, seen_states, root_board_state):
             # Dealing with the meaningless case corresponding to feature 1 in our evaluation function
             # Check whether the current action is meaningful
-            if is_meaningless_cascade(board, my_color, action):
-                continue
+            #if is_meaningless_cascade(board, my_color, action):
+                #continue
 
             # Step 1: Generate the successor of the specific legal action
             # Since we are on the MAX level, the successor should be on the MIN level below
             next_state = copy_state(board)
             apply_action(next_state, my_color, action)
 
+            # Get the penalty score
+            penalty = get_f8_score(next_state, seen_states)
+
             # Add this new successor to the seen state dictionary--not sure whether record it here
-            record_state(seen_states_mm, next_state, my_color)
+            branch_seen_states = seen_states.copy()
+            # After my agent moves, the opponent is about to move
+            next_color = my_color.opponent
+            record_state(branch_seen_states, next_state, next_color)
 
             # Step 2: Perform minimax on this new successor
             score, _ = minimax(
@@ -79,8 +104,11 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
                 False,
                 my_color,
                 total_turn_count_mm + 1,
-                seen_states_mm
+                branch_seen_states,
+                root_board_state
             )
+
+            score += penalty
 
             # Step 3: Check whether the new evaluation value gives a better score, update it if it gives
             if score > best_score:
@@ -100,16 +128,19 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
         best_score = float("inf")
         opponent_color = my_color.opponent
 
-        for action in legal_actions:
-            
-
-            if is_meaningless_cascade(board, opponent_color, action):
-                continue
+        for action in order_actions(board, opponent_color, legal_actions, total_turn_count, seen_states, root_board_state):
+            #if is_meaningless_cascade(board, opponent_color, action):
+                #continue
 
             next_state = copy_state(board)
             apply_action(next_state, opponent_color, action)
 
-            record_state(seen_states_mm, next_state, my_color)
+            penalty = get_f8_score(next_state, seen_states)
+
+            branch_seen_states = seen_states.copy()
+            # After the opponent agent moves, my agent is about to move
+            next_color = opponent_color.opponent
+            record_state(branch_seen_states, next_state, next_color)
 
             score, _ = minimax(
                 next_state,
@@ -119,8 +150,11 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
                 True,
                 my_color,
                 total_turn_count_mm + 1,
-                seen_states
+                branch_seen_states,
+                root_board_state
             )
+
+            score += penalty
 
             if score < best_score:
                 best_score = score
@@ -135,8 +169,7 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
         return best_score, best_action
     
 
-def copy_state(state):
-    return state.copy()
+# Directly related helper functions
 
 def is_terminal(board: dict[Coord, CellState], total_turn_count: int, seen_states: SeenStates, color: PlayerColor) -> bool:
     # Termination condition 1: All of a player's tokens are removed
@@ -146,7 +179,7 @@ def is_terminal(board: dict[Coord, CellState], total_turn_count: int, seen_state
         return True
     
     # Termination condition 2: The play phase has ran 300 turns
-    if total_turn_count + 1 - 4 >= 300:
+    if total_turn_count - 8 >= 300:
         return True
     
     # Termination condition 3: The same board position occurs three times
@@ -159,24 +192,4 @@ def is_terminal(board: dict[Coord, CellState], total_turn_count: int, seen_state
             return True
     
     return False
-
-def is_meaningless_cascade (new_copied_state: dict[Coord, CellState], my_color: PlayerColor, action_to_be_applied: Action) -> bool:
-    player_stacks = [(c, s) for c, s in new_copied_state.items() if s.color == my_color]
-    opponent_stacks = [(c, s) for c, s in new_copied_state.items() if s.color == my_color.opponent]
-    # If it's other actions
-    if not isinstance(action_to_be_applied, CascadeAction):
-        return False
-    
-    # Check whether the new cascade action is meaningful
-    attacker_coord = action_to_be_applied.coord
-    attacker_state = CellState(my_color, new_copied_state[attacker_coord].height)
-    attacking_direction = action_to_be_applied.direction
-
-    is_meaningful = meaningful_cascade(attacker_coord, attacker_state, opponent_stacks, attacking_direction)
-
-    if is_meaningful:
-        #print("DEBUG: Here--meaningful wrong\n")
-        return False
-    
-    return True
     

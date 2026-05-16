@@ -1,15 +1,19 @@
 from enum import Enum
 
 from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N
-from .helper import get_Manhattan_distance, get_same_direction, successful_cascade, is_adjacent, get_distance_to_edge_shortest
+from .helper import get_Manhattan_distance, get_same_direction, successful_cascade, is_adjacent, get_distance_to_edge_shortest, get_all_distance_to_opponent, get_total_height
 
 
 class BoardState(Enum):
     COMPACT_ALIGNMENT = 1
-    EDGE_CORNER_PRESSURE = 2
-    PLAYER_SCARCITY = 3
-    OPPONENT_SCATTERED = 4
-    OPPONENT_FEW_REMAIN = 5
+    OPPONENT_SCATTERED = 2
+    EDGE_CORNER_PRESSURE = 3
+    PLAYER_SCARCITY = 4
+    # OPPONENT_FEW_REMAIN = 5
+    ATTACKABLE_OPPONENT_FAR = 6
+    HAS_IMMEDIATE_AFFECT = 7
+    BALANCED = 8
+    IN_OUR_FAVOUR = 9
 
 # ----------------------------
 # Helpers to read board patterns
@@ -25,18 +29,13 @@ def is_dense (coord_outer: Coord, coord_inner: Coord) -> bool:
 
     return get_Manhattan_distance(coord_outer, coord_inner) <= 2
 
-
 def is_scatter (coord_outer: Coord, coord_inner: Coord) -> bool:
     if coord_outer == coord_inner:
         return False
 
     return get_Manhattan_distance(coord_outer, coord_inner) >= 6
 
-
-def no_player_between (
-    coord_a: Coord,
-    coord_b: Coord,
-    player_stacks: list[tuple[Coord, CellState]]
+def no_player_between (coord_a: Coord, coord_b: Coord, player_stacks: list[tuple[Coord, CellState]]
 ) -> bool:
     # Same row
     if coord_a.r == coord_b.r:
@@ -62,22 +61,16 @@ def no_player_between (
 
     return False
 
-
 def is_pressure (coord: Coord) -> bool:
     return (
         coord.r == 0 or coord.r == BOARD_N - 1 or
         coord.c == 0 or coord.c == BOARD_N - 1
     )
 
-# Detect the current state of the board, this is used for weight adjustment
-def detect_board_state (
-    opponent_stacks: list[tuple[Coord, CellState]],
-    player_stacks: list[tuple[Coord, CellState]]
-) -> list[BoardState]:
-    detected_state: list[BoardState] = []
-
-    # A: Opponent stacks are close and lined up
+# A
+def is_opponent_aligned (opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> bool:
     dense_pair_count = 0
+    
     for i, (coord_a, _) in enumerate(opponent_stacks):
         for j in range(i + 1, len(opponent_stacks)):
             coord_b, _ = opponent_stacks[j]
@@ -88,23 +81,12 @@ def detect_board_state (
                     break
 
         if dense_pair_count >= 2:
-            detected_state.append(BoardState.COMPACT_ALIGNMENT)
-            break
+            return True
 
-    # B: Opponent is building pressure on edges/corners
-    pressure_num = 0
-    for coord_opponent, _ in opponent_stacks:
-        if is_pressure(coord_opponent):
-            pressure_num += 1
-            if pressure_num >= 2:
-                detected_state.append(BoardState.EDGE_CORNER_PRESSURE)
-                break
+    return False
 
-    # C: We are behind in stack count
-    if len(player_stacks) - len(opponent_stacks) <= -2:
-        detected_state.append(BoardState.PLAYER_SCARCITY)
-
-    # D: Opponent stacks are spread out
+# B
+def is_opponent_scattered (opponent_stacks: list[tuple[Coord, CellState]]) -> bool:
     scatter_pair_count = 0
     for i, (coord_a, _) in enumerate(opponent_stacks):
         for j in range(i + 1, len(opponent_stacks)):
@@ -116,12 +98,129 @@ def detect_board_state (
         if scatter_pair_count >= 3:
             break
 
-    if scatter_pair_count >= 3 and dense_pair_count == 0:
+    if scatter_pair_count >= 3:
+        return True
+    
+    return False
+
+# C
+def is_opponent_corner_edge_pressure (opponent_stacks: list[tuple[Coord, CellState]]) -> bool:
+    pressure_num = 0
+    for coord_opponent, _ in opponent_stacks:
+        if is_pressure(coord_opponent):
+            pressure_num += 1
+            if pressure_num >= 2:
+                return True
+
+    return False
+
+# F
+def is_attackable_far (opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> bool:
+    meaningful_dists = get_all_distance_to_opponent(opponent_stacks, player_stacks)
+
+    far_count = 0
+    for dist in meaningful_dists:
+        if dist >= 4:
+            far_count += 1
+    
+    if far_count >= 2:
+        return True
+    
+    return False
+
+# G
+def has_immediate_elimination (board: dict[Coord, CellState], opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> bool:
+    for coord_player, state_player in player_stacks:
+        for coord_opponent, state_opponent in opponent_stacks:
+            if is_adjacent(coord_player, coord_opponent) and state_player.height >= state_opponent.height:
+                return True
+            possible_direction = get_same_direction(coord_player, coord_opponent)
+            if state_player.height >= 2 and possible_direction is not None:
+                if successful_cascade(board, coord_player, state_player, coord_opponent, possible_direction):
+                    return True
+    return False
+
+# H
+def is_balanced(opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> bool:
+    opponent_total_height = get_total_height(opponent_stacks)
+    player_total_height = get_total_height(player_stacks)
+    
+    # If either side has only one stack, do not treat it as balanced
+    if len(opponent_stacks) == 1 or len(player_stacks) == 1:
+        return False
+    
+    # First, Must have same total height
+    if opponent_total_height != player_total_height:
+        return False
+
+    # Second, The difference between the stack number of the two sides should be less than one
+    stack_num_diff = abs(len(opponent_stacks) - len(player_stacks))
+    if stack_num_diff > 1:
+        return False
+
+    return True
+
+# I
+def is_in_our_favour (opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> bool:
+    # First, the opponent has no more than stacks on the board
+    if len(opponent_stacks) > len(player_stacks):
+        return False
+
+    # Second, our total height is greater the opponent total height of stacks
+    opponent_total_height = get_total_height(opponent_stacks)
+    player_total_height = get_total_height(player_stacks)
+    if opponent_total_height >= player_total_height:
+        return False
+
+    return True
+
+
+# Detect the current state of the board, this is used for weight adjustment
+def detect_board_state (
+    board: dict[Coord, CellState],
+    opponent_stacks: list[tuple[Coord, CellState]],
+    player_stacks: list[tuple[Coord, CellState]]
+) -> list[BoardState]:
+    detected_state: list[BoardState] = []
+
+    # A: Opponent stacks are close and lined up
+    is_dense = False
+    if is_opponent_aligned(opponent_stacks, player_stacks):
+        detected_state.append(BoardState.COMPACT_ALIGNMENT)
+        is_dense = True
+
+    # B: Opponent stacks are spread out--this is opposite of A
+    if is_opponent_scattered(opponent_stacks) and not is_dense:
         detected_state.append(BoardState.OPPONENT_SCATTERED)
 
-    # C: We the opponent is behind in stack count--the board is favrible for us already
-    if len(player_stacks) - len(opponent_stacks) >= 2:
-        detected_state.append(BoardState.OPPONENT_FEW_REMAIN)
+    # C: Opponent is building pressure on edges/corners
+    if is_opponent_corner_edge_pressure (opponent_stacks):
+        detected_state.append(BoardState.EDGE_CORNER_PRESSURE)
+
+    # D: We are behind in stack count
+    if len(player_stacks) - len(opponent_stacks) <= -3:
+        detected_state.append(BoardState.PLAYER_SCARCITY)
+
+    # E: The opponent is behind in stack count--the board is favrible for us already
+    # Not Useful might be--this case should be included in "is in our favour"
+    #if len(player_stacks) - len(opponent_stacks) >= 3 or len(opponent_stacks) == 1:
+        #detected_state.append(BoardState.OPPONENT_FEW_REMAIN)
+
+    # E: The attackable opponents are far from us
+    if is_attackable_far(opponent_stacks, player_stacks):
+        detected_state.append(BoardState.ATTACKABLE_OPPONENT_FAR)
+
+    # F: The board state has immediate elimination with one of the actions it's going to be applied
+    if has_immediate_elimination(board, opponent_stacks, player_stacks):
+        detected_state.append(BoardState.HAS_IMMEDIATE_AFFECT)
+
+    # G: The board state is balanced: similar total stack height and similar stack number
+    if is_balanced(opponent_stacks, player_stacks):
+        detected_state.append(BoardState.BALANCED)
+
+    # H: The board state is in our player's favour
+    if is_in_our_favour(opponent_stacks, player_stacks):
+        detected_state.append(BoardState.IN_OUR_FAVOUR)
 
     return detected_state
 
