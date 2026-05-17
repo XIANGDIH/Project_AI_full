@@ -1,5 +1,5 @@
 # This file contains the logic about finding "EVAL" for the play phase.
-# We reuse old heuristic ideas, but adapt them for two-player evaluation.
+# EVAL = sum(wi * fi) where i = 1, ..., 9
 
 
 from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N, MoveAction
@@ -14,6 +14,7 @@ from .types import SeenStates
 # Main eval for play phase
 # ----------------------------
 
+# This is kept as a baseline that we can fallback to
 def evaluate (
     board: dict[Coord, CellState],
     color: PlayerColor
@@ -78,7 +79,6 @@ def evaluate (
         + dist_weight * total_dist
         + threat_weight * total_threat
     )
-
 
 # {Features}
 # Feature 1: Difference in the stack number on the board

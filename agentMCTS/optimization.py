@@ -7,7 +7,7 @@ from referee.game import PlayerColor, Coord, CellState, Action, EatAction, MoveA
 from .evaluation_play import evaluate_new
 from .rules import apply_action
 from .types import SeenStates
-from .helper import meaningful_cascade, copy_state, get_all_distance_to_opponent, get_all_distance_to_opponent_general
+from .helper import meaningful_cascade, successful_cascade, copy_state, get_all_distance_to_opponent, get_all_distance_to_opponent_general, get_total_height, get_same_direction, is_adjacent
 from .helper_play import BoardState, detect_board_state
 
 # Basic helpers
@@ -30,6 +30,7 @@ def is_meaningless_cascade (board: dict[Coord, CellState], my_color: PlayerColor
         return False
     
     # Check whether the new cascade action is meaningful
+    player_stacks = [(c, s) for c, s in board.items() if s.color == my_color]
     opponent_stacks = [(c, s) for c, s in board.items() if s.color == my_color.opponent]
 
     attacker_coord = action_to_be_applied.coord
@@ -37,6 +38,13 @@ def is_meaningless_cascade (board: dict[Coord, CellState], my_color: PlayerColor
     attacking_direction = action_to_be_applied.direction
 
     is_meaningful = meaningful_cascade(attacker_coord, attacker_state, opponent_stacks, attacking_direction)
+
+    # Special case where we only have one stack left, and our total stack heights is less than the opponent's
+    if len(player_stacks) == 1 and get_total_height(player_stacks) <= get_total_height(opponent_stacks):
+        for coord_opponent, state_opponent in opponent_stacks:
+            possible_direction = get_same_direction(attacker_coord, coord_opponent)
+            if possible_direction != None:
+                is_meaningful = successful_cascade(board, attacker_coord, attacker_state, coord_opponent, possible_direction)
 
     if is_meaningful:
         return False
@@ -69,12 +77,41 @@ def filter_meaningful_actions (board: dict[Coord, CellState], color: PlayerColor
     for action in actions:
         if is_meaningless_cascade(board, color, action):
             continue
+        if isinstance(action, MoveAction):
+            next_board = copy_state(board)
+            apply_action(next_board, color, action)
+            if moves_next_to_stronger_opponent(next_board, color, action):
+                continue
         if BoardState.BALANCED in root_board_state and is_meaningless_movement_balanced(board, color, action):
             continue
         
         filtered_actions.append(action)
 
     return filtered_actions if filtered_actions else actions
+
+def moves_next_to_stronger_opponent (
+    next_board: dict[Coord, CellState],
+    my_color: PlayerColor,
+    action: Action
+) -> bool:
+    if not isinstance(action, MoveAction):
+        return False
+
+    target_coord = action.coord + action.direction
+    moved_state = next_board.get(target_coord)
+    # Defensive check
+    if moved_state is None or moved_state.color != my_color:
+        return False
+
+    for coord, state in next_board.items():
+        # Find the opponent stack that is 
+        if state.color != my_color.opponent:
+            continue
+
+        if is_adjacent(coord, target_coord) and state.height >= moved_state.height:
+            return True
+
+    return False
 
 # Order the legal actions
 def order_actions (
@@ -95,7 +132,7 @@ def order_actions (
     origin_opponent_num = len(opponent_stacks)
     origin_meaningful_dist_min = min_attackable_distance(opponent_stacks, player_stacks)
 
-    # Defensive check--should not happen
+    # Defensive Check
     if seen_states is None:
         seen_states = {}
     if root_board_state is None:
@@ -156,6 +193,9 @@ def order_actions (
             # Penalty: The action is meaningless
             else:
                 score -= 50
+
+            if moves_next_to_stronger_opponent(next_board, my_color, action):
+                score -= 300
 
         scored_actions.append((score, action))
 

@@ -1,6 +1,9 @@
 # This file contains the logic about the game play-strategy for the play phase.
 
 
+import random
+import time
+
 from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N, Action, CascadeAction
 from .rules import get_legal_actions
 from .evaluation_play import evaluate, evaluate_new, get_f8_score
@@ -8,47 +11,110 @@ from .rules import apply_action
 from .types import SeenStates
 from .helper import encode_state, record_state, copy_state
 from .helper_play import BoardState, detect_board_state
-from .optimization import is_meaningless_cascade, order_actions
+from .optimization import is_meaningless_cascade, order_actions, moves_next_to_stronger_opponent
 
 
 # ----------------------------
 # Implementation of MINIMAX
 # ----------------------------
 
-def choose_action(board, my_color, max_depth, total_turn_count, seen_states):
-    best_action = None
+class SearchTimeout(Exception):
+    pass
+
+
+def choose_emergency_action(board, my_color, total_turn_count, seen_states, root_board_state=None):
+    legal_actions = get_legal_actions(board, my_color, total_turn_count)
+    if not legal_actions:
+        return None, float("-inf")
+
+    player_stacks = [(c, s) for c, s in board.items() if s.color == my_color]
+    opponent_stacks = [(c, s) for c, s in board.items() if s.color == my_color.opponent]
+    if root_board_state is None:
+        root_board_state = detect_board_state(board, opponent_stacks, player_stacks)
+
+    origin_opponent_num = len(opponent_stacks)
+    best_action = random.choice(legal_actions)
+    best_score = float("-inf")
+
+    try:
+        candidate_actions = order_actions(board, my_color, legal_actions, total_turn_count, seen_states, root_board_state)
+    except Exception:
+        candidate_actions = legal_actions
+
+    for action in candidate_actions:
+        next_state = copy_state(board)
+        apply_action(next_state, my_color, action)
+
+        new_opponent_num = sum(
+            1 for cell in next_state.values()
+            if cell.color == my_color.opponent
+        )
+
+        if new_opponent_num == 0:
+            return action, 1000000.0
+
+        score = evaluate_new(next_state, my_color, total_turn_count + 1, seen_states, root_board_state)
+        score += get_f8_score(next_state, seen_states)
+
+        if new_opponent_num < origin_opponent_num:
+            score += 500
+
+        if moves_next_to_stronger_opponent(next_state, my_color, action):
+            score -= 300
+
+        if score > best_score:
+            best_score = score
+            best_action = action
+
+    return best_action, best_score
+
+
+def choose_action(board, my_color, max_depth, total_turn_count, seen_states, time_limit=None):
 
     player_stacks = [(c, s) for c, s in board.items() if s.color == my_color]
     opponent_stacks = [(c, s) for c, s in board.items() if s.color == my_color.opponent]
     root_board_state = detect_board_state(board, opponent_stacks, player_stacks)
+    best_action, best_score = choose_emergency_action(board, my_color, total_turn_count, seen_states, root_board_state)
+
+    deadline = None
+    if time_limit is not None:
+        deadline = time.perf_counter() + time_limit
 
     for depth in range(1, max_depth + 1):
-        score, action = minimax(
-            board=board,
-            depth=depth,
-            alpha=float("-inf"),
-            beta=float("inf"),
-            maximizing=True,
-            my_color=my_color,
-            total_turn_count=total_turn_count,
-            seen_states=seen_states,
-            root_board_state=root_board_state
-        )
+        try:
+            score, action = minimax(
+                board=board,
+                depth=depth,
+                alpha=float("-inf"),
+                beta=float("inf"),
+                maximizing=True,
+                my_color=my_color,
+                total_turn_count=total_turn_count,
+                seen_states=seen_states,
+                root_board_state=root_board_state,
+                deadline=deadline
+            )
+        except SearchTimeout:
+            break
 
         if action is not None:
             best_action = action
+            best_score = score
 
     if best_action is None:
         legal_actions = get_legal_actions(board, my_color, total_turn_count)
-        return legal_actions[0]
+        return legal_actions[0], float("-inf")
 
-    return (best_action, score)
+    return (best_action, best_score)
 
-def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float, maximizing: bool, my_color: PlayerColor, total_turn_count: int, seen_states: SeenStates, root_board_state: list[BoardState]) -> tuple[int, Action]:
+def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float, maximizing: bool, my_color: PlayerColor, total_turn_count: int, seen_states: SeenStates, root_board_state: list[BoardState], deadline=None) -> tuple[int, Action]:
     """
     Using DFS to implement the MINIMAX strategy with alpha-beta pruning as cut-offs
     Returns (score, best_action)
     """
+
+    if deadline is not None and time.perf_counter() >= deadline:
+        raise SearchTimeout
 
     # Get who is playing in this turn--the new board is obtained by which side's action
     current_color = my_color if maximizing else my_color.opponent
@@ -78,8 +144,8 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
         for action in order_actions(board, my_color, legal_actions, total_turn_count, seen_states, root_board_state):
             # Dealing with the meaningless case corresponding to feature 1 in our evaluation function
             # Check whether the current action is meaningful
-            #if is_meaningless_cascade(board, my_color, action):
-                #continue
+            if is_meaningless_cascade(board, my_color, action):
+                continue
 
             # Step 1: Generate the successor of the specific legal action
             # Since we are on the MAX level, the successor should be on the MIN level below
@@ -105,10 +171,14 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
                 my_color,
                 total_turn_count_mm + 1,
                 branch_seen_states,
-                root_board_state
+                root_board_state,
+                deadline
             )
 
             score += penalty
+            # Check whether the current action is not preferred
+            if moves_next_to_stronger_opponent(next_state, my_color, action):
+                score -= 300
 
             # Step 3: Check whether the new evaluation value gives a better score, update it if it gives
             if score > best_score:
@@ -121,6 +191,9 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
             if beta <= alpha:
                 break   # beta cut-off
 
+        if best_action is None:
+            return evaluate_new(board, my_color, total_turn_count, seen_states, root_board_state), None
+
         # Return the best score and the corresponding best action for this node
         return best_score, best_action
 
@@ -129,8 +202,8 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
         opponent_color = my_color.opponent
 
         for action in order_actions(board, opponent_color, legal_actions, total_turn_count, seen_states, root_board_state):
-            #if is_meaningless_cascade(board, opponent_color, action):
-                #continue
+            if is_meaningless_cascade(board, opponent_color, action):
+                continue
 
             next_state = copy_state(board)
             apply_action(next_state, opponent_color, action)
@@ -151,10 +224,13 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
                 my_color,
                 total_turn_count_mm + 1,
                 branch_seen_states,
-                root_board_state
+                root_board_state,
+                deadline
             )
 
             score += penalty
+            if moves_next_to_stronger_opponent(next_state, opponent_color, action):
+                score += 300
 
             if score < best_score:
                 best_score = score
@@ -165,6 +241,9 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
 
             if beta <= alpha:
                 break   # alpha cut-off
+
+        if best_action is None:
+            return evaluate_new(board, my_color, total_turn_count, seen_states, root_board_state), None
 
         return best_score, best_action
     

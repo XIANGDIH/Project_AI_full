@@ -385,17 +385,3 @@ Testing: Correct in turn 3.
 Testing: BLUE is playing a PLACE action
 Testing: Correct in turn 3. 
 
-Testing: BLUE is playing a EAT(4-3, [→]) action with score 407.5
-
-Testing: BLUE is playing a EAT(4-5, [←]) action with score 450.0
-
-Testing: BLUE is playing a EAT(2-3, [→]) action with score 530.0
-
-Testing: BLUE is playing a EAT(4-4, [↑]) action with score 535.6
-
-Testing: BLUE is playing a EAT(3-4, [→]) action with score 537.0
-
-Testing: BLUE is playing a MOVE(4-1, [→]) action with score 1000000.0
-
-Testing: BLUE is playing a EAT(4-2, [→]) action with score 1000000.0
-

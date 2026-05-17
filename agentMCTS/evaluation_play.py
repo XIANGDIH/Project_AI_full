@@ -1,5 +1,5 @@
 # This file contains the logic about finding "EVAL" for the play phase.
-# We reuse old heuristic ideas, but adapt them for two-player evaluation.
+# We reuse old heuristic ideas, but adapt them for two-player evaluation for the MCTS.
 
 
 from referee.game import PlayerColor, Coord, Direction, CARDINAL_DIRECTIONS, CellState, BOARD_N, MoveAction
@@ -14,10 +14,12 @@ from .types import SeenStates
 # Main eval for play phase
 # ----------------------------
 
+# The evluate that is used by the playout phase
 def evaluate (
     board: dict[Coord, CellState],
     color: PlayerColor,
-    total_turn_count: int
+    total_turn_count: int,
+    seen_states: SeenStates | None = None
 ) -> float:
     """
     Bigger score = better board for this player.
@@ -80,6 +82,7 @@ def evaluate (
         total_threat += best_threat
 
     safe_action_num = get_f9_score_fast(board, color, opponent_stacks, player_stacks)
+    seen_state_penalty = get_f8_score(board, seen_states) if seen_states is not None else 0.0
 
     # Old heuristic was "lower is better"; we flip it to "higher is better".
     return -(
@@ -87,7 +90,7 @@ def evaluate (
         + dist_weight * total_dist
         + threat_weight * total_threat
         + opponent_escapability_weight * safe_action_num
-    )
+    ) + seen_state_penalty
 
 
 # {Features}

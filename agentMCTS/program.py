@@ -14,6 +14,7 @@ from .search import mcts_choose_action
 
 verbose: bool = False
 DEPTH_SEARCH = 3
+PLAY_TIME_LIMIT = 5.0
 
 class Agent:
     """
@@ -82,11 +83,11 @@ class Agent:
             case PlayerColor.RED:
                 if verbose:
                     print("Testing: RED is playing a MOVE action")
-                return mcts_choose_action(self._board, self._color, self._total_turn_count, self._seen_states)
+                return mcts_choose_action(self._board, self._color, self._total_turn_count, self._seen_states, time_limit=PLAY_TIME_LIMIT)
             case PlayerColor.BLUE:
                 if verbose:
                     print("Testing: BLUE is playing a MOVE action")
-                return mcts_choose_action(self._board, self._color, self._total_turn_count, self._seen_states)
+                return mcts_choose_action(self._board, self._color, self._total_turn_count, self._seen_states, time_limit=PLAY_TIME_LIMIT)
             
     def update(self, color: PlayerColor, action: Action, **referee: dict):
         """

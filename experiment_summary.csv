@@ -1,7 +1,7 @@
 Matchup,Agent,Games,Wins,Win rate,Win rate percent,Average time seconds,Average turn count
-agentMMe1_vs_agent,agent,10,10,1.0,100.0,3.4753,26.8
-agentMMe1_vs_agent,agentMMe1,10,0,0.0,0.0,3.4753,26.8
-agentMMe1_vs_agentMCTS,agentMCTS,10,10,1.0,100.0,33.0305,44.0
-agentMMe1_vs_agentMCTS,agentMMe1,10,0,0.0,0.0,33.0305,44.0
-agent_vs_agentMCTS,agent,5,0,0.0,0.0,107.3497,140.4
-agent_vs_agentMCTS,agentMCTS,5,0,0.0,0.0,107.3497,140.4
+agentMMe1_vs_agent,agent,10,10,1.0,100.0,2.8964,24.4
+agentMMe1_vs_agent,agentMMe1,10,0,0.0,0.0,2.8964,24.4
+agentMMe1_vs_agentMCTS,agentMCTS,10,10,1.0,100.0,35.2105,37.0
+agentMMe1_vs_agentMCTS,agentMMe1,10,0,0.0,0.0,35.2105,37.0
+agent_vs_agentMCTS,agent,5,4,0.8,80.0,171.6921,80.4
+agent_vs_agentMCTS,agentMCTS,5,1,0.2,20.0,171.6921,80.4

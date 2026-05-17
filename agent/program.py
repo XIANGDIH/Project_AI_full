@@ -13,6 +13,7 @@ from .helper import encode_state, record_state, successful_cascade
 
 verbose: bool = False
 DEPTH_SEARCH = 4
+PLAY_TIME_LIMIT = 5.0
 
 class Agent:
     """
@@ -78,13 +79,11 @@ class Agent:
         match self._color:
             case PlayerColor.RED:
                 if True:
-                    action, score = choose_action(self._board, self._color, DEPTH_SEARCH, self._total_turn_count, self._seen_states)
-                    print(f"Testing: RED is playing a {action} action with score {score}\n")
+                    action, score = choose_action(self._board, self._color, DEPTH_SEARCH, self._total_turn_count, self._seen_states, PLAY_TIME_LIMIT)
                 return action
             case PlayerColor.BLUE:
                 if True:
-                    action, score = choose_action(self._board, self._color, DEPTH_SEARCH, self._total_turn_count, self._seen_states)
-                    print(f"Testing: BLUE is playing a {action} action with score {score}\n")
+                    action, score = choose_action(self._board, self._color, DEPTH_SEARCH, self._total_turn_count, self._seen_states, PLAY_TIME_LIMIT)
                 return action
             
     def update(self, color: PlayerColor, action: Action, **referee: dict):

@@ -6,9 +6,9 @@ from referee.game import PlayerColor, Coord, Direction, CellState, BOARD_N, Acti
 from .rules import get_legal_actions, apply_action
 from .helper import copy_state, encode_state, record_state, get_all_distance_to_opponent
 from .types import SeenStates
-from .evaluation_play import evaluate, evaluate_new
+from .evaluation_play import evaluate, evaluate_new, get_f9_score_fast
 from .helper_play import BoardState, detect_board_state
-from .optimization import filter_meaningful_actions, order_actions
+from .optimization import filter_meaningful_actions, order_actions, moves_next_to_stronger_opponent
 
 C = math.sqrt(2)
 
@@ -49,7 +49,7 @@ class MCTSNode:
         self.untried_actions = None
 
         self.playout_num = 0
-        self.reward_num = 0.0         # the number of wins from root player's perspective (our agent's perspective)
+        self.reward_num = 0.0         # the number of wins for the player who made the action leading into this node
 
     def is_fully_expanded(self) -> bool:
         return self.untried_actions is not None and len(self.untried_actions) == 0
@@ -202,13 +202,18 @@ def playout(board: dict[Coord, CellState], my_color: PlayerColor, player_to_move
             # ss1: Apply the action
             new_board = copy_state(current_board)
             apply_action(new_board, current_player_color, action)
+            penalty = 0
+
+            if moves_next_to_stronger_opponent(new_board, current_player_color, action):
+                penalty = -300
 
             # ss2: Evaluate the new board state after applying this action--Always with respect to our own agent player
             player_stacks = [(c, s) for c, s in current_board.items() if s.color == my_color]
             opponent_stacks = [(c, s) for c, s in current_board.items() if s.color == my_color.opponent]
             #parent_board_state = detect_board_state(current_board, opponent_stacks, player_stacks)
             #(new_board, my_color, current_total_turn_count, current_seen_state, root_board_state)
-            evaluations[action] = evaluate(new_board, my_color, current_total_turn_count)
+            evaluations[action] = evaluate(new_board, my_color, current_total_turn_count, current_seen_state)
+            evaluations[action] += penalty
 
         if evaluations:
             ordered_evaluations_des = sorted(
@@ -245,65 +250,96 @@ def playout(board: dict[Coord, CellState], my_color: PlayerColor, player_to_move
     # Get the reward value of this playout at the end of the playout (we have terminate this playout)
     return get_score_for_playout_result(current_board, my_color, current_player_color, current_total_turn_count, current_seen_state)
 
-def get_score_for_playout_result(current_board: dict[Coord, CellState], my_color: PlayerColor, current_player_color: PlayerColor, current_total_turn_count: int, current_seen_states: SeenStates) -> tuple[float, PlayerColor | None]:
-    """
-    Return reward from our agent's perspective.
-    --This should be updated to be more efficient
-    """
+def clamp(x: float, low: float, high: float) -> float:
+    return max(low, min(high, x))
 
-    my_score = 0
-    enemy_score = 0
-    win_player_color = None
 
-    for cell in current_board.values():
-        if cell.color == my_color:
-            my_score += cell.height
-        else:
-            enemy_score += cell.height
+def get_score_for_playout_result(
+    current_board: dict[Coord, CellState],
+    my_color: PlayerColor,
+    current_player_color: PlayerColor,
+    current_total_turn_count: int,
+    current_seen_states: SeenStates
+) -> tuple[float, PlayerColor | None]:
 
+    player_stacks = [(c, s) for c, s in current_board.items() if s.color == my_color]
+    opponent_stacks = [(c, s) for c, s in current_board.items() if s.color == my_color.opponent]
+
+    my_score = sum(s.height for _, s in player_stacks)
+    enemy_score = sum(s.height for _, s in opponent_stacks)
+
+    # Real terminal result: keep this sharp.
     if is_terminal(current_board, current_total_turn_count, current_seen_states, current_player_color):
-        # In terms of "favorable": with respect to my agent player
-        # Case 1: In the current stopping state, our agent has won--it has eliminated all the opponent's stacks or our agent has more tokens on the board
         if my_score > 0 and enemy_score == 0:
-            win_player_color = my_color
-        elif my_score > enemy_score:
-            win_player_color = my_color
-        # Case 2: A draw
-        elif my_score == enemy_score:
-            win_player_color = None
-        # Case 3: A lose
-        else:
-            win_player_color = my_color.opponent
-    else:
-        # Case 4: The current board state is favorable, even if we haven't reached an terminal state of the game
+            return 1.0, my_color
+        if enemy_score > 0 and my_score == 0:
+            return 1.0, my_color.opponent
         if my_score > enemy_score:
-            win_player_color = my_color
-        # Case 5: The current board state is not favorable
-        elif my_score < enemy_score:
-            win_player_color = my_color.opponent
-        # Case 6: The current board state is intermediate, hard to tell good or not
-        else:
-            win_player_color = None
-    
-    if win_player_color != None:
-        return (1.0, win_player_color)
+            return 1.0, my_color
+        if my_score < enemy_score:
+            return 1.0, my_color.opponent
+        return 0.5, None
+
+    # Non-terminal rollout cutoff: soft heuristic reward.
+    total_height = my_score + enemy_score
+    material_score = 0.0
+    if total_height > 0:
+        material_score = (my_score - enemy_score) / total_height
+
+    total_stacks = len(player_stacks) + len(opponent_stacks)
+    stack_score = 0.0
+    if total_stacks > 0:
+        stack_score = (len(player_stacks) - len(opponent_stacks)) / total_stacks
+
+    safe_escape_num = get_f9_score_fast(
+        current_board,
+        my_color,
+        opponent_stacks,
+        player_stacks
+    )
+
+    max_escape_num = max(1, 4 * len(opponent_stacks))
+    escape_score = 1.0 - (safe_escape_num / max_escape_num)
+    escape_score = 2.0 * escape_score - 1.0
+
+    # Final-stack positions should care more about trapping.
+    if len(opponent_stacks) == 1:
+        soft_reward = (
+            0.5
+            + 0.15 * material_score
+            + 0.15 * stack_score
+            + 0.30 * escape_score
+        )
     else:
-        return (0.0, None)
+        soft_reward = (
+            0.5
+            + 0.25 * material_score
+            + 0.20 * stack_score
+            + 0.10 * escape_score
+        )
+
+    soft_reward = clamp(soft_reward, 0.05, 0.95)
+
+    if soft_reward > 0.52:
+        return soft_reward, my_color
+    if soft_reward < 0.48:
+        return 1.0 - soft_reward, my_color.opponent
+
+    return 0.5, None
 
 
 # {Backpropagation}
-def backpropagate(node: MCTSNode, reward: float, win_player_color: PlayerColor) -> None:
-    """
-    Update visits and rewards from the newly expanded and "evaluated" child node back to the root.
-    """
-
-    # Traverse from the newly simulated child node back to the root of the tree
-    # Update the nodes in this path
+def backpropagate(
+    node: MCTSNode,
+    reward: float,
+    win_player_color: PlayerColor | None
+) -> None:
     while node is not None:
         node.playout_num += 1
-        # For nodes representing the winner agent to play next
-        if node.parent is not None and node.parent.player_to_move_color == win_player_color:
+
+        if win_player_color is None:
+            node.reward_num += 0.5
+        elif node.parent is not None and node.parent.player_to_move_color == win_player_color:
             node.reward_num += reward
 
-        # Keep traversing
         node = node.parent

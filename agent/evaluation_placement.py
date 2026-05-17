@@ -21,7 +21,7 @@ def choose_coord_placement_phase(
     board: dict[Coord, CellState],
     legal_actions: list[Action],
     color: PlayerColor,
-    total_turn_count: int) -> Coord:
+    turn_count: int) -> Coord:
     """
     Generate all legal and preferred coordinates for the current agent from self._board.
     This returns a (random) preferred (trying to be optimal) coordinate where we should
@@ -52,10 +52,10 @@ def choose_coord_placement_phase(
     empty_coords = legal_coords
 
     # For the first turn
-    if color == PlayerColor.RED and total_turn_count == 0:
+    if color == PlayerColor.RED and turn_count == 0:
         return random.choice(centre_coords)
     # If we are Blue
-    if color == PlayerColor.BLUE and total_turn_count == 0:
+    if color == PlayerColor.BLUE and turn_count == 0:
         # Get the placed Red stack (placed by the enemy)
         placed_enemy_coord = red_coords[0]
 
@@ -72,7 +72,7 @@ def choose_coord_placement_phase(
                 return coord_cr
     
     # For the second turn
-    if total_turn_count == 1:
+    if turn_count == 1:
         centre_taken = False    # A flag for checking whether the centre is full now
         placed_coord_by_us = None
         
@@ -111,7 +111,7 @@ def choose_coord_placement_phase(
     # For the third and forth turn
     # Special case: Corner pressure
     operational_coord = has_corner_pressure_get_remain_corner(opponent_coords)
-    is_my_last_placement = total_turn_count == 3
+    is_my_last_placement = turn_count == 3
 
     if is_my_last_placement and operational_coord is not None:
         match operational_coord[0]:
