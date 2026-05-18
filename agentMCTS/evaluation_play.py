@@ -14,7 +14,7 @@ from .types import SeenStates
 # Main eval for play phase
 # ----------------------------
 
-# The evluate that is used by the playout phase
+# The evluate that is used by the playout phase, we have tried to use the complicated one, below, but it is too time-consuming...
 def evaluate (
     board: dict[Coord, CellState],
     color: PlayerColor,
@@ -94,7 +94,7 @@ def evaluate (
 
 
 # {Features}
-# Feature 1: Difference in the stack number on the board
+# Feature 1: The remaining number of the opponent stacks on the board
 def get_f1_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> float:
     return 12 - len(opponent_stacks)
 
@@ -247,7 +247,7 @@ def get_f8_score (board: dict[Coord, CellState],seen_states: SeenStates
     return 0.0
 
 # Feature 9: The escapability of the opponent stacks
-def get_f9_score (board, my_color, total_turn_count):
+def get_f9_score (board: dict[Coord, CellState], my_color: PlayerColor, total_turn_count: int) -> int:
     opponent = my_color.opponent
     safe_count = 0
 
@@ -281,13 +281,7 @@ def get_f9_score (board, my_color, total_turn_count):
             safe_count += 1
 
     return safe_count
-
-def get_f9_score_fast (
-    board: dict[Coord, CellState],
-    my_color: PlayerColor,
-    opponent_stacks: list[tuple[Coord, CellState]],
-    player_stacks: list[tuple[Coord, CellState]]
-) -> int:
+def get_f9_score_fast (board: dict[Coord, CellState], my_color: PlayerColor, opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> int:
     safe_count = 0
 
     for coord_opponent, state_opponent in opponent_stacks:
@@ -407,7 +401,7 @@ def evaluate_new (
         f9_weight += 15.0
 
     # Get the scores for eac feature
-    feature1_stack_num_diff = get_f1_score(opponent_stacks, player_stacks)
+    feature1_opponent_remaim = get_f1_score(opponent_stacks, player_stacks)
     feature2_stack_height_diff = get_f2_score(opponent_stacks,player_stacks)
     feature3_legal_action_diff = get_f3_score(board, color, total_turn_count)
     feature4_eat_diff = get_f4_score(opponent_stacks, player_stacks)
@@ -419,7 +413,7 @@ def evaluate_new (
     feature10_attackable_closest_dist = get_f10_score(opponent_stacks, player_stacks)
 
     return (
-        + f1_weight * feature1_stack_num_diff
+        + f1_weight * feature1_opponent_remaim
         + f2_weight * feature2_stack_height_diff
         #+ f3_weight * feature3_legal_action_diff
         + f4_weight * feature4_eat_diff

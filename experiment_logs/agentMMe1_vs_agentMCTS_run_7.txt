@@ -351,13 +351,13 @@ Run `python -m referee --help` for additional usage information.
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 22) ...
-* referee : BLUE plays action MOVE(1-4, [↓])
+* referee : BLUE plays action MOVE(1-4, [←])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R1 B3 .  .  .  
+* referee :                          .  .  .  B3 .  .  .  .  
+* referee :                          .  .  .  R1 .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  B3 .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
@@ -372,8 +372,8 @@ Run `python -m referee --help` for additional usage information.
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  B3 .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  R1 .  .  .  .  
 * referee :                          .  .  B3 .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
@@ -388,8 +388,8 @@ Run `python -m referee --help` for additional usage information.
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  B3 .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  R1 B3 .  .  .  
 * referee :                          .  .  B3 .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
@@ -404,8 +404,8 @@ Run `python -m referee --help` for additional usage information.
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R1 B3 .  .  .  
+* referee :                          .  .  .  B3 .  .  .  .  
+* referee :                          .  .  .  R1 .  .  .  .  
 * referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  B3 .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
@@ -415,7 +415,7 @@ Run `python -m referee --help` for additional usage information.
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 26) ...
-* referee : BLUE plays action EAT(2-4, [←])
+* referee : BLUE plays action EAT(1-3, [↓])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 

@@ -11,7 +11,7 @@ from .rules import apply_action
 from .types import SeenStates
 from .helper import encode_state, record_state, copy_state
 from .helper_play import BoardState, detect_board_state
-from .optimization import is_meaningless_cascade, order_actions, moves_next_to_stronger_opponent
+from .optimization import is_meaningless_cascade, order_actions, moves_next_to_stronger_opponent, move_allows_direct_cascade_elimination
 
 
 # ----------------------------
@@ -61,6 +61,8 @@ def choose_emergency_action(board, my_color, total_turn_count, seen_states, root
 
         if moves_next_to_stronger_opponent(next_state, my_color, action):
             score -= 300
+        if move_allows_direct_cascade_elimination(next_state, my_color, action):
+            score -= 300
 
         if score > best_score:
             best_score = score
@@ -75,6 +77,8 @@ def choose_action(board, my_color, max_depth, total_turn_count, seen_states, tim
     opponent_stacks = [(c, s) for c, s in board.items() if s.color == my_color.opponent]
     root_board_state = detect_board_state(board, opponent_stacks, player_stacks)
     best_action, best_score = choose_emergency_action(board, my_color, total_turn_count, seen_states, root_board_state)
+    if best_score >= 1000000.0:
+        return best_action, best_score
 
     deadline = None
     if time_limit is not None:
@@ -179,6 +183,8 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
             # Check whether the current action is not preferred
             if moves_next_to_stronger_opponent(next_state, my_color, action):
                 score -= 300
+            if move_allows_direct_cascade_elimination(next_state, my_color, action):
+                score -= 300
 
             # Step 3: Check whether the new evaluation value gives a better score, update it if it gives
             if score > best_score:
@@ -230,6 +236,8 @@ def minimax(board: dict[Coord, CellState], depth: int, alpha: float, beta: float
 
             score += penalty
             if moves_next_to_stronger_opponent(next_state, opponent_color, action):
+                score += 300
+            if move_allows_direct_cascade_elimination(next_state, opponent_color, action):
                 score += 300
 
             if score < best_score:

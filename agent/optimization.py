@@ -84,6 +84,7 @@ def filter_meaningful_actions (board: dict[Coord, CellState], color: PlayerColor
 
     return filtered_actions if filtered_actions else actions
 
+# The two cases a MOVE action should be penalized
 def moves_next_to_stronger_opponent (
     next_board: dict[Coord, CellState],
     my_color: PlayerColor,
@@ -104,6 +105,32 @@ def moves_next_to_stronger_opponent (
             continue
 
         if is_adjacent(coord, target_coord) and state.height >= moved_state.height:
+            return True
+
+    return False
+
+def move_allows_direct_cascade_elimination (
+    next_board: dict[Coord, CellState],
+    my_color: PlayerColor,
+    action: Action
+) -> bool:
+    if not isinstance(action, MoveAction):
+        return False
+
+    target_coord = action.coord + action.direction
+    moved_state = next_board.get(target_coord)
+    if moved_state is None or moved_state.color != my_color:
+        return False
+
+    for coord, state in next_board.items():
+        if state.color != my_color.opponent or state.height < 2:
+            continue
+
+        cascade_direction = get_same_direction(coord, target_coord)
+        if cascade_direction is None:
+            continue
+
+        if successful_cascade(next_board, coord, state, target_coord, cascade_direction):
             return True
 
     return False
@@ -190,6 +217,8 @@ def order_actions (
                 score -= 50
 
             if moves_next_to_stronger_opponent(next_board, my_color, action):
+                score -= 300
+            if move_allows_direct_cascade_elimination(next_board, my_color, action):
                 score -= 300
 
         scored_actions.append((score, action))

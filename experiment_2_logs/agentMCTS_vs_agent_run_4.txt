@@ -15,15 +15,15 @@ Run `python -m referee --help` for additional usage information.
 * referee : player RED is initialising
 * referee : player BLUE is initialising
 * referee : RED to play (turn 1) ...
-* referee : RED plays action PLACE(3-3)
+* referee : RED plays action PLACE(4-3)
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  R3 .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
@@ -31,15 +31,15 @@ Run `python -m referee --help` for additional usage information.
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 2) ...
-* referee : BLUE plays action PLACE(4-4)
+* referee : BLUE plays action PLACE(3-4)
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
 * referee :                          .  .  .  .  B3 .  .  .  
+* referee :                          .  .  .  R3 .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
@@ -47,15 +47,15 @@ Run `python -m referee --help` for additional usage information.
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 3) ...
-* referee : RED plays action PLACE(3-5)
+* referee : RED plays action PLACE(2-3)
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  R3 .  .  
+* referee :                          .  .  .  R3 .  .  .  .  
 * referee :                          .  .  .  .  B3 .  .  .  
+* referee :                          .  .  .  R3 .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
@@ -63,15 +63,15 @@ Run `python -m referee --help` for additional usage information.
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 4) ...
-* referee : BLUE plays action PLACE(2-4)
+* referee : BLUE plays action PLACE(3-2)
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          .  .  .  R3 .  R3 .  .  
-* referee :                          .  .  .  .  B3 .  .  .  
+* referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  B3 .  B3 .  .  .  
+* referee :                          .  .  .  R3 .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
@@ -79,1325 +79,869 @@ Run `python -m referee --help` for additional usage information.
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 5) ...
-* referee : RED plays action PLACE(5-3)
+* referee : RED plays action PLACE(4-5)
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          .  .  .  R3 .  R3 .  .  
-* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  B3 .  B3 .  .  .  
+* referee :                          .  .  .  R3 .  R3 .  .  
+* referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 6) ...
-* referee : BLUE plays action PLACE(4-2)
+* referee : BLUE plays action PLACE(5-4)
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          .  .  .  R3 .  R3 .  .  
-* referee :                          .  .  B3 .  B3 .  .  .  
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  B3 .  B3 .  .  .  
+* referee :                          .  .  .  R3 .  R3 .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 7) ...
-* referee : RED plays action PLACE(1-3)
+* referee : RED plays action PLACE(4-1)
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          .  .  .  R3 .  R3 .  .  
 * referee :                          .  .  B3 .  B3 .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  R3 .  R3 .  R3 .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 8) ...
-* referee : BLUE plays action PLACE(4-6)
+* referee : BLUE plays action PLACE(1-4)
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
 * referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          .  .  .  R3 .  R3 .  .  
-* referee :                          .  .  B3 .  B3 .  B3 .  
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  B3 .  B3 .  .  .  
+* referee :                          .  R3 .  R3 .  R3 .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 9) ...
-* referee : RED plays action MOVE(1-3, [←])
+* referee : RED plays action MOVE(4-5, [→])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  R3 .  .  .  .  .  
 * referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          .  .  .  R3 .  R3 .  .  
-* referee :                          .  .  B3 .  B3 .  B3 .  
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  B3 .  B3 .  .  .  
+* referee :                          .  R3 .  R3 .  .  R3 .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 10) ...
-* referee : BLUE plays action MOVE(4-2, [←])
+* referee : BLUE plays action MOVE(3-4, [→])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  R3 .  .  .  .  .  
 * referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          .  .  .  R3 .  R3 .  .  
-* referee :                          .  B3 .  .  B3 .  B3 .  
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  B3 .  .  B3 .  .  
+* referee :                          .  R3 .  R3 .  .  R3 .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 11) ...
-* referee : RED plays action MOVE(1-2, [↑])
+* referee : RED plays action MOVE(4-1, [←])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  .  R3 .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          .  .  .  R3 .  R3 .  .  
-* referee :                          .  B3 .  .  B3 .  B3 .  
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  B3 .  .  B3 .  .  
+* referee :                          R3 .  .  R3 .  .  R3 .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 12) ...
-* referee : BLUE plays action MOVE(2-4, [↑])
+* referee : BLUE plays action MOVE(1-4, [↑])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  .  R3 .  .  .  .  .  
 * referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  R3 .  .  
-* referee :                          .  B3 .  .  B3 .  B3 .  
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  B3 .  .  B3 .  .  
+* referee :                          R3 .  .  R3 .  .  R3 .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 13) ...
-* referee : RED plays action MOVE(3-3, [←])
+* referee : RED plays action MOVE(4-0, [→])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  .  R3 .  .  .  .  .  
 * referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  R3 .  .  R3 .  .  
-* referee :                          .  B3 .  .  B3 .  B3 .  
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  B3 .  .  B3 .  .  
+* referee :                          .  R3 .  R3 .  .  R3 .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 14) ...
-* referee : BLUE plays action MOVE(4-6, [→])
+* referee : BLUE plays action MOVE(3-5, [←])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  .  R3 .  .  .  .  .  
 * referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  R3 .  .  R3 .  .  
-* referee :                          .  B3 .  .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  B3 .  B3 .  .  .  
+* referee :                          .  R3 .  R3 .  .  R3 .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 15) ...
-* referee : RED plays action MOVE(0-2, [←])
+* referee : RED plays action MOVE(4-1, [↓])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  R3 .  .  .  .  .  .  
 * referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  R3 .  .  R3 .  .  
-* referee :                          .  B3 .  .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  B3 .  B3 .  .  .  
+* referee :                          .  .  .  R3 .  .  R3 .  
+* referee :                          .  R3 .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 16) ...
-* referee : BLUE plays action MOVE(4-1, [←])
+* referee : BLUE plays action MOVE(5-4, [↓])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  R3 .  .  .  .  .  .  
 * referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  R3 .  .  R3 .  .  
-* referee :                          B3 .  .  .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  B3 .  B3 .  .  .  
+* referee :                          .  .  .  R3 .  .  R3 .  
+* referee :                          .  R3 .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 17) ...
-* referee : RED plays action MOVE(3-2, [↓])
+* referee : RED plays action MOVE(5-1, [↑])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  R3 .  .  .  .  .  .  
 * referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  R3 .  .  
-* referee :                          B3 .  R3 .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  B3 .  B3 .  .  .  
+* referee :                          .  R3 .  R3 .  .  R3 .  
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 18) ...
-* referee : BLUE plays action MOVE(1-4, [↓])
+* referee : BLUE plays action MOVE(0-4, [↓])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  R3 .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          .  .  .  .  .  R3 .  .  
-* referee :                          B3 .  R3 .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  B3 .  B3 .  .  .  
+* referee :                          .  R3 .  R3 .  .  R3 .  
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 19) ...
-* referee : RED plays action CASCADE(4-2, [←])
+* referee : RED plays action MOVE(4-1, [↓])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  R3 .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          .  .  .  .  .  R3 .  .  
-* referee :                          R1 R1 .  .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  B3 .  B3 .  .  .  
+* referee :                          .  .  .  R3 .  .  R3 .  
+* referee :                          .  R3 .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 20) ...
-* referee : BLUE plays action MOVE(2-4, [↑])
+* referee : BLUE plays action MOVE(6-4, [↓])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  R3 .  .  .  .  .  .  
+* referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  R3 .  .  
-* referee :                          R1 R1 .  .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  B3 .  B3 .  .  .  
+* referee :                          .  .  .  R3 .  .  R3 .  
+* referee :                          .  R3 .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 21) ...
-* referee : RED plays action MOVE(4-1, [↑])
+* referee : RED plays action MOVE(4-6, [←])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  R3 .  .  .  .  .  .  
+* referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R1 .  .  .  R3 .  .  
-* referee :                          R1 .  .  .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  B3 .  B3 .  .  .  
+* referee :                          .  .  .  R3 .  R3 .  .  
+* referee :                          .  R3 .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 22) ...
-* referee : BLUE plays action MOVE(1-4, [←])
+* referee : BLUE plays action MOVE(3-2, [←])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  R3 .  .  .  .  .  .  
-* referee :                          .  .  .  B3 .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R1 .  .  .  R3 .  .  
-* referee :                          R1 .  .  .  B3 .  .  B3 
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  B3 .  .  B3 .  .  .  
+* referee :                          .  .  .  R3 .  R3 .  .  
+* referee :                          .  R3 .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 23) ...
-* referee : RED plays action MOVE(3-5, [→])
+* referee : RED plays action MOVE(5-1, [→])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  R3 .  .  .  .  .  .  
-* referee :                          .  .  .  B3 .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R1 .  .  .  .  R3 .  
-* referee :                          R1 .  .  .  B3 .  .  B3 
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  B3 .  .  B3 .  .  .  
+* referee :                          .  .  .  R3 .  R3 .  .  
+* referee :                          .  .  R3 .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 24) ...
-* referee : BLUE plays action MOVE(1-3, [↓])
+* referee : BLUE plays action MOVE(1-4, [↑])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  R3 .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  B3 .  .  .  .  
-* referee :                          .  R1 .  .  .  .  R3 .  
-* referee :                          R1 .  .  .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  B3 .  .  B3 .  .  .  
+* referee :                          .  .  .  R3 .  R3 .  .  
+* referee :                          .  .  R3 .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 25) ...
-* referee : RED plays action MOVE(3-1, [↑])
+* referee : RED plays action MOVE(5-2, [↑])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  R3 .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R1 .  B3 .  .  .  .  
-* referee :                          .  .  .  .  .  .  R3 .  
-* referee :                          R1 .  .  .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  B3 .  .  B3 .  .  .  
+* referee :                          .  .  R3 R3 .  R3 .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 26) ...
-* referee : BLUE plays action CASCADE(2-3, [←])
+* referee : BLUE plays action MOVE(7-4, [↑])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  R3 .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          B1 B1 B1 .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R3 .  
-* referee :                          R1 .  .  .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  B3 .  .  B3 .  .  .  
+* referee :                          .  .  R3 R3 .  R3 .  .  
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 27) ...
-* referee : RED plays action MOVE(3-6, [↑])
+* referee : RED plays action MOVE(4-5, [→])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  R3 .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          B1 B1 B1 .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          R1 .  .  .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  B3 .  .  B3 .  .  .  
+* referee :                          .  .  R3 R3 .  .  R3 .  
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 28) ...
-* referee : BLUE plays action MOVE(2-1, [→])
+* referee : BLUE plays action MOVE(3-1, [←])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  R3 .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          B1 .  B2 .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          R1 .  .  .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          B3 .  .  .  B3 .  .  .  
+* referee :                          .  .  R3 R3 .  .  R3 .  
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 29) ...
-* referee : RED plays action MOVE(2-6, [↑])
+* referee : RED plays action MOVE(4-2, [→])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  R3 .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R3 .  
-* referee :                          B1 .  B2 .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          R1 .  .  .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          B3 .  .  .  B3 .  .  .  
+* referee :                          .  .  .  R6 .  .  R3 .  
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 30) ...
-* referee : BLUE plays action MOVE(2-2, [←])
+* referee : BLUE plays action MOVE(6-4, [↑])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
-* referee :                          .  R3 .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R3 .  
-* referee :                          B1 B2 .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          R1 .  .  .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          B3 .  .  .  B3 .  .  .  
+* referee :                          .  .  .  R6 .  .  R3 .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 31) ...
-* referee : RED plays action MOVE(0-1, [↓])
+* referee : RED plays action MOVE(4-3, [↓])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R3 .  .  .  .  R3 .  
-* referee :                          B1 B2 .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          R1 .  .  .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          B3 .  .  .  B3 .  .  .  
+* referee :                          .  .  .  .  .  .  R3 .  
+* referee :                          .  .  .  R6 B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 32) ...
-* referee : BLUE plays action MOVE(2-1, [←])
+* referee : BLUE plays action MOVE(3-4, [↓])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R3 .  .  .  .  R3 .  
-* referee :                          B3 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          R1 .  .  .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          B3 .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  R3 .  
+* referee :                          .  .  .  R6 B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 33) ...
-* referee : RED plays action MOVE(4-0, [→])
+* referee : RED plays action EAT(5-3, [→])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R3 .  .  .  .  R3 .  
-* referee :                          B3 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R1 .  .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          B3 .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  B3 .  R3 .  
+* referee :                          .  .  .  .  R6 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 34) ...
-* referee : BLUE plays action MOVE(2-0, [↓])
+* referee : BLUE plays action CASCADE(4-4, [↓])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R3 .  .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          B3 .  .  .  .  .  .  .  
-* referee :                          .  R1 .  .  B3 .  .  B3 
 * referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          B3 .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  .  .  R3 .  
+* referee :                          .  .  .  .  B1 .  .  .  
+* referee :                          .  .  .  .  B1 .  .  .  
+* referee :                          .  .  .  .  B1 .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 35) ...
-* referee : RED plays action MOVE(1-6, [←])
+* referee : RED plays action MOVE(2-3, [→])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R3 .  .  .  R3 .  .  
-* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  R3 .  .  .  
 * referee :                          B3 .  .  .  .  .  .  .  
-* referee :                          .  R1 .  .  B3 .  .  B3 
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  .  .  R3 .  
+* referee :                          .  .  .  .  B1 .  .  .  
+* referee :                          .  .  .  .  B1 .  .  .  
+* referee :                          .  .  .  .  B1 .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 36) ...
-* referee : BLUE plays action MOVE(3-0, [↓])
+* referee : BLUE plays action MOVE(3-0, [→])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R3 .  .  .  R3 .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          B3 R1 .  .  B3 .  .  B3 
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  R3 .  .  .  
+* referee :                          .  B3 .  .  .  .  .  .  
+* referee :                          .  .  .  .  .  .  R3 .  
+* referee :                          .  .  .  .  B1 .  .  .  
+* referee :                          .  .  .  .  B1 .  .  .  
+* referee :                          .  .  .  .  B1 .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 37) ...
-* referee : RED plays action MOVE(4-1, [↑])
+* referee : RED plays action CASCADE(2-4, [↑])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
+* referee :                          .  .  .  .  R1 .  .  .  
+* referee :                          .  .  .  .  R1 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R3 .  .  .  R3 .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R1 .  .  .  .  .  .  
-* referee :                          B3 .  .  .  B3 .  .  B3 
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  B3 .  .  .  .  .  .  
+* referee :                          .  .  .  .  .  .  R3 .  
+* referee :                          .  .  .  .  B1 .  .  .  
+* referee :                          .  .  .  .  B1 .  .  .  
+* referee :                          .  .  .  .  B1 .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 38) ...
-* referee : BLUE plays action MOVE(4-7, [↑])
+* referee : BLUE plays action MOVE(7-4, [↑])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
+* referee :                          .  .  .  .  R1 .  .  .  
+* referee :                          .  .  .  .  R1 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R3 .  .  .  R3 .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R1 .  .  .  .  .  B3 
-* referee :                          B3 .  .  .  B3 .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  B3 .  .  .  .  .  .  
+* referee :                          .  .  .  .  .  .  R3 .  
+* referee :                          .  .  .  .  B1 .  .  .  
+* referee :                          .  .  .  .  B2 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 39) ...
-* referee : RED plays action MOVE(1-5, [←])
+* referee : RED plays action MOVE(1-4, [←])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
+* referee :                          .  .  .  .  R1 .  .  .  
+* referee :                          .  .  .  R1 .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R3 .  .  R3 .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R1 .  .  .  .  .  B3 
-* referee :                          B3 .  .  .  B3 .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  B3 .  .  .  .  .  .  
+* referee :                          .  .  .  .  .  .  R3 .  
+* referee :                          .  .  .  .  B1 .  .  .  
+* referee :                          .  .  .  .  B2 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 40) ...
-* referee : BLUE plays action MOVE(4-0, [↑])
+* referee : BLUE plays action MOVE(3-1, [↑])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
+* referee :                          .  .  .  .  R1 .  .  .  
+* referee :                          .  .  .  R1 .  .  .  .  
+* referee :                          .  B3 .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R3 .  .  R3 .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          B3 R1 .  .  .  .  .  B3 
-* referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  .  .  R3 .  
+* referee :                          .  .  .  .  B1 .  .  .  
+* referee :                          .  .  .  .  B2 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 41) ...
-* referee : RED plays action MOVE(3-1, [↑])
+* referee : RED plays action MOVE(0-4, [↓])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R3 .  .  R3 .  .  .  
-* referee :                          .  R1 .  .  .  .  .  .  
-* referee :                          B3 .  .  .  .  .  .  B3 
-* referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  .  R1 R1 .  .  .  
+* referee :                          .  B3 .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  .  .  R3 .  
+* referee :                          .  .  .  .  B1 .  .  .  
+* referee :                          .  .  .  .  B2 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 42) ...
-* referee : BLUE plays action MOVE(4-4, [→])
+* referee : BLUE plays action MOVE(2-1, [↑])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R3 .  .  R3 .  .  .  
-* referee :                          .  R1 .  .  .  .  .  .  
-* referee :                          B3 .  .  .  .  .  .  B3 
-* referee :                          .  .  .  .  .  B3 .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  B3 .  R1 R1 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  .  .  R3 .  
+* referee :                          .  .  .  .  B1 .  .  .  
+* referee :                          .  .  .  .  B2 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 43) ...
-* referee : RED plays action MOVE(5-3, [→])
+* referee : RED plays action MOVE(4-6, [←])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R3 .  .  R3 .  .  .  
-* referee :                          .  R1 .  .  .  .  .  .  
-* referee :                          B3 .  .  .  .  .  .  B3 
-* referee :                          .  .  .  .  .  B3 .  .  
-* referee :                          .  .  .  .  R3 .  .  .  
+* referee :                          .  B3 .  R1 R1 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  .  R3 .  .  
+* referee :                          .  .  .  .  B1 .  .  .  
+* referee :                          .  .  .  .  B2 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 44) ...
-* referee : BLUE plays action MOVE(4-5, [↑])
+* referee : BLUE plays action MOVE(6-4, [↑])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R3 .  .  R3 .  .  .  
-* referee :                          .  R1 .  .  .  .  .  .  
-* referee :                          B3 .  .  .  .  B3 .  B3 
+* referee :                          .  B3 .  R1 R1 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  R3 .  .  .  
+* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  .  .  R3 .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 45) ...
-* referee : RED plays action MOVE(5-4, [←])
+* referee : RED plays action MOVE(1-4, [↓])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R3 .  .  R3 .  .  .  
-* referee :                          .  R1 .  .  .  .  .  .  
-* referee :                          B3 .  .  .  .  B3 .  B3 
+* referee :                          .  B3 .  R1 .  .  .  .  
+* referee :                          .  .  .  .  R1 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  .  .  .  R3 .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 46) ...
-* referee : BLUE plays action MOVE(3-5, [↑])
+* referee : BLUE plays action MOVE(1-1, [→])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R3 .  .  R3 .  .  .  
-* referee :                          .  R1 .  .  .  B3 .  .  
-* referee :                          B3 .  .  .  .  .  .  B3 
+* referee :                          .  .  B3 R1 .  .  .  .  
+* referee :                          .  .  .  .  R1 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  .  .  .  R3 .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 47) ...
-* referee : RED plays action MOVE(1-1, [↓])
+* referee : RED plays action MOVE(2-4, [↓])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  R3 .  .  .  
-* referee :                          .  R4 .  .  .  B3 .  .  
-* referee :                          B3 .  .  .  .  .  .  B3 
+* referee :                          .  .  B3 R1 .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  .  .  R1 .  .  .  
+* referee :                          .  .  .  .  .  R3 .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 48) ...
-* referee : BLUE plays action MOVE(2-5, [↓])
+* referee : BLUE plays action EAT(1-2, [→])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  R3 .  .  .  
-* referee :                          .  R4 .  .  .  .  .  .  
-* referee :                          B3 .  .  .  .  B3 .  B3 
+* referee :                          .  .  .  B3 .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  .  .  R1 .  .  .  
+* referee :                          .  .  .  .  .  R3 .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 49) ...
-* referee : RED plays action MOVE(5-3, [↑])
+* referee : RED plays action MOVE(3-4, [←])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  R3 .  .  .  
-* referee :                          .  R4 .  .  .  .  .  .  
-* referee :                          B3 .  .  .  .  B3 .  B3 
-* referee :                          .  .  .  R3 .  .  .  .  
+* referee :                          .  .  .  B3 .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  R1 .  .  .  .  
+* referee :                          .  .  .  .  .  R3 .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 50) ...
-* referee : BLUE plays action MOVE(3-7, [↓])
+* referee : BLUE plays action CASCADE(1-3, [↓])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  R3 .  .  .  
-* referee :                          .  R4 .  .  .  .  .  .  
-* referee :                          B3 .  .  .  .  B3 .  .  
-* referee :                          .  .  .  R3 .  .  .  B3 
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  B1 .  .  .  .  
+* referee :                          .  .  .  B1 .  .  .  .  
+* referee :                          .  .  .  B1 .  R3 .  .  
+* referee :                          .  .  .  R1 B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 51) ...
-* referee : RED plays action MOVE(1-4, [←])
+* referee : RED plays action EAT(5-3, [↑])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  R4 .  .  .  .  .  .  
-* referee :                          B3 .  .  .  .  B3 .  .  
-* referee :                          .  .  .  R3 .  .  .  B3 
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  B1 .  .  .  .  
+* referee :                          .  .  .  B1 .  .  .  .  
+* referee :                          .  .  .  R1 .  R3 .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 52) ...
-* referee : BLUE plays action MOVE(3-5, [←])
+* referee : BLUE plays action EAT(3-3, [↓])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  R4 .  .  .  .  .  .  
-* referee :                          B3 .  .  .  B3 .  .  .  
-* referee :                          .  .  .  R3 .  .  .  B3 
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  B1 .  .  .  .  
+* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  B1 .  R3 .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 53) ...
-* referee : RED plays action MOVE(1-3, [←])
+* referee : RED plays action MOVE(4-5, [↑])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  R3 .  .  .  .  .  
-* referee :                          .  R4 .  .  .  .  .  .  
-* referee :                          B3 .  .  .  B3 .  .  .  
-* referee :                          .  .  .  R3 .  .  .  B3 
 * referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  B1 .  .  .  .  
+* referee :                          .  .  .  .  .  R3 .  .  
+* referee :                          .  .  .  B1 .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 54) ...
-* referee : BLUE plays action MOVE(4-7, [↓])
+* referee : BLUE plays action MOVE(5-4, [↑])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  R3 .  .  .  .  .  
-* referee :                          .  R4 .  .  .  .  .  .  
-* referee :                          B3 .  .  .  B3 .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  B3 
+* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  B1 .  .  .  .  
+* referee :                          .  .  .  .  .  R3 .  .  
+* referee :                          .  .  .  B1 B3 .  .  .  
+* referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 55) ...
-* referee : RED plays action MOVE(2-1, [↓])
+* referee : RED plays action MOVE(3-5, [→])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  R3 .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          B3 R4 .  .  B3 .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  B3 
+* referee :                          .  .  .  B1 .  .  .  .  
+* referee :                          .  .  .  .  .  .  R3 .  
+* referee :                          .  .  .  B1 B3 .  .  .  
+* referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 56) ...
-* referee : BLUE plays action MOVE(3-4, [↑])
+* referee : BLUE plays action MOVE(4-4, [↑])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  R3 .  .  .  .  .  
-* referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          B3 R4 .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  B3 
+* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  B1 .  .  .  .  
+* referee :                          .  .  .  .  B3 .  R3 .  
+* referee :                          .  .  .  B1 .  .  .  .  
+* referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : RED to play (turn 57) ...
-* referee : RED plays action EAT(3-1, [←])
+* referee : RED plays action MOVE(3-6, [→])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  R3 .  .  .  .  .  
-* referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  B3 
+* referee :                          .  .  .  .  .  .  .  .  
+* referee :                          .  .  .  B1 .  .  .  .  
+* referee :                          .  .  .  .  B3 .  .  R3 
+* referee :                          .  .  .  B1 .  .  .  .  
+* referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
 * referee : BLUE to play (turn 58) ...
-* referee : BLUE plays action MOVE(5-7, [←])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  R3 .  .  .  .  .  
-* referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  .  .  B3 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : RED to play (turn 59) ...
-* referee : RED plays action MOVE(4-3, [↓])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  R3 .  .  .  .  .  
-* referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  B3 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : BLUE to play (turn 60) ...
-* referee : BLUE plays action MOVE(5-6, [↓])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  R3 .  .  .  .  .  
-* referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  .  .  B3 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : RED to play (turn 61) ...
-* referee : RED plays action MOVE(1-2, [→])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  .  .  B3 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : BLUE to play (turn 62) ...
-* referee : BLUE plays action MOVE(6-6, [←])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  .  B3 .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : RED to play (turn 63) ...
-* referee : RED plays action MOVE(5-3, [→])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  B3 .  .  .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  R3 .  .  .  
-* referee :                          .  .  .  .  .  B3 .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : BLUE to play (turn 64) ...
-* referee : BLUE plays action MOVE(2-4, [→])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          .  .  .  .  .  B3 .  .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  R3 .  .  .  
-* referee :                          .  .  .  .  .  B3 .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : RED to play (turn 65) ...
-* referee : RED plays action MOVE(1-3, [↓])
+* referee : BLUE plays action CASCADE(3-4, [→])
 * referee : 
 * referee : =========================== game board ===========================
 * referee : 
 * referee :                          .  .  .  .  .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  R3 .  B3 .  .  
-* referee :                          R4 .  .  .  .  .  .  .  
+* referee :                          .  .  .  B1 .  .  .  .  
+* referee :                          .  .  .  .  .  B1 B1 B1 
+* referee :                          .  .  .  B1 .  .  .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  R3 .  .  .  
-* referee :                          .  .  .  .  .  B3 .  .  
 * referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : BLUE to play (turn 66) ...
-* referee : BLUE plays action MOVE(2-5, [↑])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  B3 .  .  
-* referee :                          .  .  .  R3 .  .  .  .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  R3 .  .  .  
-* referee :                          .  .  .  .  .  B3 .  .  
 * referee :                          .  .  .  .  .  .  .  .  
 * referee : 
 * referee : ==================================================================
 * referee : 
-* referee : RED to play (turn 67) ...
-* referee : RED plays action MOVE(2-3, [→])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  B3 .  .  
-* referee :                          .  .  .  .  R3 .  .  .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  R3 .  .  .  
-* referee :                          .  .  .  .  .  B3 .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : BLUE to play (turn 68) ...
-* referee : BLUE plays action MOVE(6-5, [→])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  B3 .  .  
-* referee :                          .  .  .  .  R3 .  .  .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  R3 .  .  .  
-* referee :                          .  .  .  .  .  .  B3 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : RED to play (turn 69) ...
-* referee : RED plays action MOVE(5-4, [→])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  B3 .  .  
-* referee :                          .  .  .  .  R3 .  .  .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  R3 .  .  
-* referee :                          .  .  .  .  .  .  B3 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : BLUE to play (turn 70) ...
-* referee : BLUE plays action MOVE(1-5, [→])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  B3 .  
-* referee :                          .  .  .  .  R3 .  .  .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  R3 .  .  
-* referee :                          .  .  .  .  .  .  B3 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : RED to play (turn 71) ...
-* referee : RED plays action MOVE(2-4, [→])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  B3 .  
-* referee :                          .  .  .  .  .  R3 .  .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  R3 .  .  
-* referee :                          .  .  .  .  .  .  B3 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : BLUE to play (turn 72) ...
-* referee : BLUE plays action MOVE(6-6, [→])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  B3 .  
-* referee :                          .  .  .  .  .  R3 .  .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  R3 .  .  
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : RED to play (turn 73) ...
-* referee : RED plays action MOVE(5-5, [→])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  B3 .  
-* referee :                          .  .  .  .  .  R3 .  .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : BLUE to play (turn 74) ...
-* referee : BLUE plays action MOVE(1-6, [→])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee :                          .  .  .  .  .  R3 .  .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : RED to play (turn 75) ...
-* referee : RED plays action MOVE(3-0, [↑])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee :                          R4 .  .  .  .  R3 .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : BLUE to play (turn 76) ...
-* referee : BLUE plays action MOVE(1-7, [↑])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          R4 .  .  .  .  R3 .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : RED to play (turn 77) ...
-* referee : RED plays action MOVE(2-5, [→])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          R4 .  .  .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : BLUE to play (turn 78) ...
-* referee : BLUE plays action MOVE(0-7, [←])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  B3 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          R4 .  .  .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : RED to play (turn 79) ...
-* referee : RED plays action CASCADE(2-6, [↑])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  R1 .  
-* referee :                          .  .  .  .  .  .  R1 .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : BLUE to play (turn 80) ...
-* referee : BLUE plays action MOVE(6-7, [↓])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  R1 .  
-* referee :                          .  .  .  .  .  .  R1 .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : RED to play (turn 81) ...
-* referee : RED plays action MOVE(0-6, [↓])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R2 .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : BLUE to play (turn 82) ...
-* referee : BLUE plays action MOVE(7-7, [↑])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R2 .  
-* referee :                          R4 .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : RED to play (turn 83) ...
-* referee : RED plays action MOVE(1-6, [↓])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          R4 .  .  .  .  .  R2 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : BLUE to play (turn 84) ...
-* referee : BLUE plays action MOVE(6-7, [↓])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          R4 .  .  .  .  .  R2 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : RED to play (turn 85) ...
-* referee : RED plays action MOVE(2-0, [→])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R4 .  .  .  .  R2 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : BLUE to play (turn 86) ...
-* referee : BLUE plays action MOVE(7-7, [↑])
-* referee : 
-* referee : =========================== game board ===========================
-* referee : 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  R4 .  .  .  .  R2 .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  .  .  
-* referee :                          .  .  .  .  .  .  R3 .  
-* referee :                          .  .  .  .  .  .  .  B3 
-* referee :                          .  .  .  .  .  .  .  .  
-* referee : 
-* referee : ==================================================================
-* referee : 
-* referee : RED to play (turn 87) ...
-* player1 ! resource limit exceeded (pid=45352): exceeded available time
-* player1 ! 
-* player1 ! resources usage status:
-* player1 !   time:  + 3.898s  (just elapsed)     182.199s  (game total)
-* player1 !   space:   1.047MB (current usage)      1.047MB (peak usage)
-* player1 ! 
-* referee ! player error: ERROR: exceeded available time in player 1 [agentMCTS:Agent] agent
 * referee : game over, winner is BLUE
 * referee @ result: player 2 [agent:Agent]
 
@@ -1416,82 +960,4 @@ Testing: Correct in turn 3.
 
 Testing: BLUE is playing a PLACE action
 Testing: Correct in turn 3. 
-
-Testing: BLUE is playing a MOVE(4-2, [←]) action with score 362.0
-
-Testing: BLUE is playing a MOVE(2-4, [↑]) action with score 314.0
-
-Testing: BLUE is playing a MOVE(4-6, [→]) action with score 309.5
-
-Testing: BLUE is playing a MOVE(4-1, [←]) action with score 300.5
-
-Testing: BLUE is playing a MOVE(1-4, [↓]) action with score 304.5
-
-Testing: BLUE is playing a MOVE(2-4, [↑]) action with score 309.8
-
-Testing: BLUE is playing a MOVE(1-4, [←]) action with score 306.0
-
-Testing: BLUE is playing a MOVE(1-3, [↓]) action with score 306.0
-
-Testing: BLUE is playing a CASCADE(2-3, [←]) action with score 329.6
-
-Testing: BLUE is playing a MOVE(2-1, [→]) action with score 325.5
-
-Testing: BLUE is playing a MOVE(2-2, [←]) action with score 356.4
-
-Testing: BLUE is playing a MOVE(2-1, [←]) action with score 357.0
-
-Testing: BLUE is playing a MOVE(2-0, [↓]) action with score 357.0
-
-Testing: BLUE is playing a MOVE(3-0, [↓]) action with score 357.0
-
-Testing: BLUE is playing a MOVE(4-7, [↑]) action with score 306.0
-
-Testing: BLUE is playing a MOVE(4-0, [↑]) action with score 338.0
-
-Testing: BLUE is playing a MOVE(4-4, [→]) action with score 344.0
-
-Testing: BLUE is playing a MOVE(4-5, [↑]) action with score 306.0
-
-Testing: BLUE is playing a MOVE(3-5, [↑]) action with score 309.0
-
-Testing: BLUE is playing a MOVE(2-5, [↓]) action with score 338.0
-
-Testing: BLUE is playing a MOVE(3-7, [↓]) action with score 290.0
-
-Testing: BLUE is playing a MOVE(3-5, [←]) action with score 290.0
-
-Testing: BLUE is playing a MOVE(4-7, [↓]) action with score 296.0
-
-Testing: BLUE is playing a MOVE(3-4, [↑]) action with score 334.5
-
-Testing: BLUE is playing a MOVE(5-7, [←]) action with score 324.5
-
-Testing: BLUE is playing a MOVE(5-6, [↓]) action with score 324.5
-
-Testing: BLUE is playing a MOVE(6-6, [←]) action with score 327.5
-
-Testing: BLUE is playing a MOVE(2-4, [→]) action with score 381.5
-
-Testing: BLUE is playing a MOVE(2-5, [↑]) action with score 327.5
-
-Testing: BLUE is playing a MOVE(6-5, [→]) action with score 327.5
-
-Testing: BLUE is playing a MOVE(1-5, [→]) action with score 381.5
-
-Testing: BLUE is playing a MOVE(6-6, [→]) action with score 327.5
-
-Testing: BLUE is playing a MOVE(1-6, [→]) action with score 381.5
-
-Testing: BLUE is playing a MOVE(1-7, [↑]) action with score 327.5
-
-Testing: BLUE is playing a MOVE(0-7, [←]) action with score 273.5
-
-Testing: BLUE is playing a MOVE(6-7, [↓]) action with score -1000300.0
-
-Testing: BLUE is playing a MOVE(7-7, [↑]) action with score 171.0
-
-Testing: BLUE is playing a MOVE(6-7, [↓]) action with score -1000300.0
-
-Testing: BLUE is playing a MOVE(7-7, [↑]) action with score -129.0
 

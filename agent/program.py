@@ -11,6 +11,7 @@ from .search import choose_action
 from .types import SeenStates
 from .helper import encode_state, record_state, successful_cascade
 
+
 verbose: bool = False
 DEPTH_SEARCH = 4
 PLAY_TIME_LIMIT = 5.0
@@ -65,12 +66,14 @@ class Agent:
             # Step 2: Choose the best coordinate to place our stack
             match self._color:
                 case PlayerColor.RED:
-                    print("Testing: RED is playing a PLACE action")
+                    if verbose:
+                        print("Testing: RED is playing a PLACE action")
                     
                     best_placing_coord = choose_coord_placement_phase(self._board, legal_actions, self._color, self._turn_count)
                     return PlaceAction(best_placing_coord)
                 case PlayerColor.BLUE:
-                    print("Testing: BLUE is playing a PLACE action")
+                    if verbose:
+                        print("Testing: BLUE is playing a PLACE action")
 
                     best_placing_coord = choose_coord_placement_phase(self._board, legal_actions, self._color, self._turn_count)
                     return PlaceAction(best_placing_coord)

@@ -11,7 +11,7 @@ from .types import SeenStates
 from .helper import copy_state, encode_state, record_state
 from .helper_MCTS import MCTSNode, select, expand, is_terminal, playout, backpropagate
 from .helper_play import detect_board_state, BoardState
-from .optimization import filter_meaningful_actions, order_actions, moves_next_to_stronger_opponent
+from .optimization import filter_meaningful_actions, order_actions, moves_next_to_stronger_opponent, move_allows_direct_cascade_elimination
 
 
 # ----------------------------
@@ -58,6 +58,8 @@ def choose_emergency_action(
         if new_opponent_num < origin_opponent_num:
             score += 500
         if moves_next_to_stronger_opponent(next_board, my_color, action):
+            score -= 300
+        if move_allows_direct_cascade_elimination(next_board, my_color, action):
             score -= 300
 
         if score > best_score:

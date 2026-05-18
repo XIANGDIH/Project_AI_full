@@ -81,7 +81,7 @@ def evaluate (
     )
 
 # {Features}
-# Feature 1: Difference in the stack number on the board
+# Feature 1: The remaining number of the opponent stacks on the board
 def get_f1_score (opponent_stacks: list[tuple[Coord, CellState]], player_stacks: list[tuple[Coord, CellState]]) -> float:
     return 12 - len(opponent_stacks)
 
@@ -362,19 +362,19 @@ def evaluate_new (
         f9_weight += 15.0
 
     # Get the scores for eac feature
-    feature1_stack_num_diff = get_f1_score(opponent_stacks, player_stacks)
+    feature1_opponent_remaim = get_f1_score(opponent_stacks, player_stacks)
     feature2_stack_height_diff = get_f2_score(opponent_stacks,player_stacks)
-    feature3_legal_action_diff = get_f3_score(board, color, total_turn_count)
+    #feature3_legal_action_diff = get_f3_score(board, color, total_turn_count)
     feature4_eat_diff = get_f4_score(opponent_stacks, player_stacks)
     feature5_cascade_diff = get_f5_score(board, opponent_stacks, player_stacks)
     feature6_same_line_diff = get_f6_score(opponent_stacks, player_stacks)
-    feature7_average_edge_dist_diff = get_f7_score(opponent_stacks, player_stacks)
-    feature8_has_seen_penalty = get_f8_score(board, seen_states)
+    #feature7_average_edge_dist_diff = get_f7_score(opponent_stacks, player_stacks)
+    #feature8_has_seen_penalty = get_f8_score(board, seen_states)
     #feature9_opponent_escapability = get_f9_score(board, color, total_turn_count)
     feature10_attackable_closest_dist = get_f10_score(opponent_stacks, player_stacks)
 
     return (
-        + f1_weight * feature1_stack_num_diff
+        + f1_weight * feature1_opponent_remaim
         + f2_weight * feature2_stack_height_diff
         #+ f3_weight * feature3_legal_action_diff
         + f4_weight * feature4_eat_diff

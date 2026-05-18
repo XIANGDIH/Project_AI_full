@@ -8,7 +8,7 @@ from .helper import copy_state, encode_state, record_state, get_all_distance_to_
 from .types import SeenStates
 from .evaluation_play import evaluate, evaluate_new, get_f9_score_fast
 from .helper_play import BoardState, detect_board_state
-from .optimization import filter_meaningful_actions, order_actions, moves_next_to_stronger_opponent
+from .optimization import filter_meaningful_actions, order_actions, moves_next_to_stronger_opponent, move_allows_direct_cascade_elimination
 
 C = math.sqrt(2)
 
@@ -206,6 +206,8 @@ def playout(board: dict[Coord, CellState], my_color: PlayerColor, player_to_move
 
             if moves_next_to_stronger_opponent(new_board, current_player_color, action):
                 penalty = -300
+            if move_allows_direct_cascade_elimination(new_board, current_player_color, action):
+                penalty -= 300
 
             # ss2: Evaluate the new board state after applying this action--Always with respect to our own agent player
             player_stacks = [(c, s) for c, s in current_board.items() if s.color == my_color]

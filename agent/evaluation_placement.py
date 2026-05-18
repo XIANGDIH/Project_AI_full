@@ -13,6 +13,8 @@ from .helper_placement import in_safe_area, in_possible_area, create_triangle_at
 from .helper import get_closest_to_centre
 
 
+verbose: bool = False
+
 # ----------------------------
 # Placement phase (first 8 turns in total, 4 per player)
 # ----------------------------
@@ -103,7 +105,8 @@ def choose_coord_placement_phase(
 
             # Defensive fallback
             if best is not None:
-                print("Testing: Correct in turn 2. \n")
+                if verbose:
+                    print("Testing: Correct in turn 2. \n")
                 return best
 
             return random.choice(legal_coords)
@@ -142,7 +145,8 @@ def choose_coord_placement_phase(
 
         # Defensive fallback
         if best is not None:
-            print("Testing: Correct in turn 3-extended. \n")
+            if verbose:
+                print("Testing: Correct in turn 3-extended. \n")
             return best
 
         return random.choice(legal_coords)
@@ -153,7 +157,8 @@ def choose_coord_placement_phase(
 
     # Defensive fallback
     if best is not None:
-        print("Testing: Correct in turn 3. \n")
+        if verbose:
+            print("Testing: Correct in turn 3. \n")
         return best
 
     return random.choice(legal_coords)
